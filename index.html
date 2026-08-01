@@ -1622,282 +1622,9 @@
     }
 </script>
 
-<!-- Three.js Script (LENGKAP DENGAN JALAN, KOMPAS, TOOLTIP, KLIK) -->
-<script type="module">
-    import * as THREE from 'three';
-    import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-
-    const container = document.getElementById('denah-canvas-container');
-    const tooltip = document.getElementById('tooltip-denah');
-
-    const dataTanah = [
-        { id: "A3", luas: 147.9, p: 14.5, l: 10.20, status: "Tersedia", harga: "Rp 60.000.000" },
-        { id: "B3", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 58.000.000" },
-        { id: "C3", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 57.000.000" },
-        { id: "D3", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 56.000.000" },
-        { id: "E3", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 55.000.000" },
-        { id: "F3", luas: 154.42, p: 14.5, l: 10.65, status: "Tersedia", harga: "Rp 57.000.000" },
-        { id: "G2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 49.000.000" },
-        { id: "H2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 48.000.000" },
-        { id: "I2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 47.000.000" },
-        { id: "J2", luas: 145.75, p: 14.57, l: 10, status: "Tersedia", harga: "Rp 46.000.000" },
-        { id: "K2", luas: 146.5, p: 14.65, l: 10, status: "Tersedia", harga: "Rp 39.000.000" },
-        { id: "L2", luas: 146.5, p: 14.65, l: 10, status: "Tersedia", harga: "Rp 38.000.000" },
-        { id: "M2", luas: 147.75, p: 14.77, l: 10, status: "Tersedia", harga: "Rp 37.000.000" },
-        { id: "N2", luas: 154, p: 15.4, l: 10, status: "Tersedia", harga: "Rp 37.000.000" },
-        { id: "O2", luas: 127.05, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 27.000.000" },
-        { id: "A2", luas: 147, p: 14.5, l: 10.20, status: "Tersedia", harga: "Rp 60.000.000" },
-        { id: "B2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 58.000.000" },
-        { id: "C2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 57.000.000" },
-        { id: "D2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 56.000.000" },
-        { id: "E2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 55.000.000" },
-        { id: "F2", luas: 163.12, p: 14.5, l: 11.25, status: "Tersedia", harga: "Rp 61.000.000" },
-        { id: "G1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 49.000.000" },
-        { id: "H1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 48.000.000" },
-        { id: "I1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 47.000.000" },
-        { id: "J1", luas: 145.75, p: 14.57, l: 10, status: "Tersedia", harga: "Rp 46.000.000" },
-        { id: "K1", luas: 146.5, p: 14.65, l: 10, status: "Tersedia", harga: "Rp 39.000.000" },
-        { id: "L1", luas: 146.5, p: 14.65, l: 10, status: "Tersedia", harga: "Rp 38.000.000" },
-        { id: "M1", luas: 147.75, p: 14.77, l: 10, status: "Tersedia", harga: "Rp 37.000.000" },
-        { id: "N1", luas: 154, p: 15.4, l: 10, status: "Tersedia", harga: "Rp 37.000.000" },
-        { id: "O1", luas: 160.93, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 34.000.000" },
-        { id: "A1", luas: 147, p: 14.5, l: 10.20, status: "Tersedia", harga: "Rp 60.000.000" },
-        { id: "B1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 58.000.000" },
-        { id: "C1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 57.000.000" },
-        { id: "D1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 56.000.000" },
-        { id: "E1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 55.000.000" },
-        { id: "F1", luas: 168.92, p: 14.5, l: 11.65, status: "Tersedia", harga: "Rp 63.000.000" },
-        { id: "P", luas: 658.8, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 225.000.000" }
-    ]
-
-    const statusColors = { "Tersedia": "#22c55e", "Booking": "#eab308", "Terjual": "#ef4444" };
-
-    const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x050505);
-    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-
-    const isMobile = window.innerWidth < 768;
-    camera.position.set(0, isMobile ? 45 : 35, isMobile ? 20 : 16);
-
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
-    renderer.setSize(container.clientWidth, container.clientHeight);
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    container.appendChild(renderer.domElement);
-
-    const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enabled = false;
-
-    scene.add(new THREE.AmbientLight(0xffffff, 1.2));
-
-    const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
-    let hoveredObject = null;
-    const plots = [];
-
-    function openUnitAction(unitData) {
-        if (unitData.status === "Tersedia") {
-            if (typeof window.openSimulationModal === 'function') {
-                window.openSimulationModal(unitData.id, unitData.harga);
-            }
-        } else if (unitData.status === "Booking") {
-            if (typeof window.openWaitingListModal === 'function') {
-                window.openWaitingListModal(unitData.id, unitData.harga);
-            }
-        } else {
-            alert(`Maaf, Unit ${unitData.id} sudah terjual.`);
-        }
-    }
-
-    container.addEventListener('click', (event) => {
-        if (hoveredObject) {
-            const d = hoveredObject.userData;
-            tooltip.style.display = 'none';
-            hoveredObject.scale.set(1, 1, 1);
-            hoveredObject = null;
-            container.style.cursor = "default";
-            openUnitAction(d);
-        }
-    });
-
-    function addRoad(x, z, w, d, rot, name) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 512;
-        canvas.height = 64;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = '#1e40af';
-        ctx.fillRect(0, 0, 512, 64);
-        ctx.fillStyle = 'white';
-        ctx.font = 'bold 24px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(name, 256, 42);
-        const tex = new THREE.CanvasTexture(canvas);
-        const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ map: tex, side: 2 }));
-        mesh.position.set(x, 0.05, z);
-        mesh.rotation.x = -Math.PI / 2;
-        mesh.rotation.z = rot;
-        scene.add(mesh);
-    }
-
-    addRoad(-11, -3, 16, 1.8, Math.PI / 2, "J A L A N   D E S A");
-    addRoad(-5, 5, 16, 1.8, -Math.PI / 12, "J A L A N   D E S A");
-
-    function makeCompassLabel(text, pos) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 128;
-        canvas.height = 128;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = 'white';
-        ctx.font = 'bold 80px Arial';
-        ctx.textAlign = 'center';
-        ctx.fillText(text, 64, 90);
-        const tex = new THREE.CanvasTexture(canvas);
-        const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex }));
-        sprite.position.copy(pos);
-        sprite.scale.set(1.5, 1.5, 1);
-        return sprite;
-    }
-
-    function createCompass() {
-        const group = new THREE.Group();
-        const matRed = new THREE.MeshBasicMaterial({ color: 0xef4444 });
-        const matWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
-        const coneGeo = new THREE.ConeGeometry(0.5, 2, 8);
-        const n = new THREE.Mesh(coneGeo, matRed);
-        n.position.z = -1.2;
-        n.rotation.x = -Math.PI / 2;
-        group.add(n);
-        const s = new THREE.Mesh(coneGeo, matWhite);
-        s.position.z = 1.2;
-        s.rotation.x = Math.PI / 2;
-        group.add(s);
-        const e = new THREE.Mesh(coneGeo, matWhite);
-        e.position.x = 1.2;
-        e.rotation.z = -Math.PI / 2;
-        group.add(e);
-        const w = new THREE.Mesh(coneGeo, matWhite);
-        w.position.x = -1.2;
-        w.rotation.z = Math.PI / 2;
-        group.add(w);
-        group.add(makeCompassLabel("U", new THREE.Vector3(0, 0, -3.5)));
-        group.add(makeCompassLabel("S", new THREE.Vector3(0, 0, 3.5)));
-        group.add(makeCompassLabel("T", new THREE.Vector3(3.5, 0, 0)));
-        group.add(makeCompassLabel("B", new THREE.Vector3(-3.5, 0, 0)));
-        group.position.set(13, 0.2, -14);
-        group.rotation.y = Math.PI;
-        scene.add(group);
-    }
-    createCompass();
-
-    function makeUnitLabel(text, color) {
-        const canvas = document.createElement('canvas');
-        canvas.width = 256;
-        canvas.height = 256;
-        const ctx = canvas.getContext('2d');
-        ctx.fillStyle = color;
-        ctx.fillRect(0, 0, 256, 256);
-        ctx.fillStyle = 'black';
-        ctx.font = 'bold 90px Arial';
-        ctx.textAlign = 'center';
-        ctx.textBaseline = 'middle';
-        ctx.fillText(text, 128, 128);
-        return new THREE.CanvasTexture(canvas);
-    }
-
-    function createPlot(data, x, z, w, d) {
-        const color = statusColors[data.status];
-        const tex = makeUnitLabel(data.id, color);
-        const geo = new THREE.BoxGeometry(w, 0.5, d);
-        const matTop = new THREE.MeshStandardMaterial({ map: tex });
-        const matSide = new THREE.MeshStandardMaterial({ color: color });
-        const mesh = new THREE.Mesh(geo, [matSide, matSide, matTop, matSide, matSide, matSide]);
-        mesh.position.set(x, 0.25, z);
-        mesh.userData = data;
-        scene.add(mesh);
-        plots.push(mesh);
-    }
-
-    dataTanah.forEach((item, i) => {
-        if (i < 15) createPlot(item, -8.5 + (i * 1.3), -7.5, 1.1, 2.2);
-        else if (i < 30) createPlot(item, -8.5 + ((i - 15) * 1.3), -4, 1.1, 2.2);
-        else if (i < 36) createPlot(item, -8.5 + ((i - 30) * 1.3), -1.5, 1.1, 2.2);
-        else createPlot(item, -6 + ((i - 35) * 2), 2.2, 1.8, 2.8);
-    });
-
-    container.addEventListener('mousemove', (e) => {
-        const rect = container.getBoundingClientRect();
-        mouse.x = ((e.clientX - rect.left) / container.clientWidth) * 2 - 1;
-        mouse.y = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
-        tooltip.style.left = (e.clientX + 20) + 'px';
-        tooltip.style.top = (e.clientY + 20) + 'px';
-    });
-
-    let touchTimeout;
-    container.addEventListener('touchstart', (e) => {
-        if (e.touches.length === 1) {
-            const touch = e.touches[0];
-            const rect = container.getBoundingClientRect();
-            mouse.x = ((touch.clientX - rect.left) / container.clientWidth) * 2 - 1;
-            mouse.y = -((touch.clientY - rect.top) / container.clientHeight) * 2 + 1;
-
-            tooltip.style.left = (touch.clientX + 20) + 'px';
-            tooltip.style.top = (touch.clientY + 20) + 'px';
-
-            clearTimeout(touchTimeout);
-            touchTimeout = setTimeout(() => {
-                tooltip.style.display = 'none';
-            }, 3000);
-        }
-    });
-
-    function animate() {
-        requestAnimationFrame(animate);
-        raycaster.setFromCamera(mouse, camera);
-        const hits = raycaster.intersectObjects(plots);
-        if (hits.length > 0) {
-            const obj = hits[0].object;
-            if (hoveredObject !== obj) {
-                if (hoveredObject) hoveredObject.scale.set(1, 1, 1);
-                hoveredObject = obj;
-                const d = obj.userData;
-
-                document.getElementById('t-unit').innerHTML =
-                    `UNIT ${d.id} <span style="color: ${statusColors[d.status]}; font-size: 1em; font-weight: 800; margin-left: 10px;">${d.status.toUpperCase()}</span>`;
-                let dimensiText = `${d.luas}m²`;
-                if (d.p !== "Khusus " && d.l !== "Khusus ") {
-                    dimensiText += ` | ${d.l}m x ${d.p}m`;
-                }
-                document.getElementById('t-luas-dimensi').innerText = dimensiText;
-                document.getElementById('t-harga').innerText = d.harga;
-
-                tooltip.style.display = 'block';
-                obj.scale.set(1.05, 5, 1.05);
-                container.style.cursor = (d.status === "Tersedia" || d.status === "Booking") ? "pointer" : "default";
-            }
-        } else {
-            if (hoveredObject) {
-                hoveredObject.scale.set(1, 1, 1);
-                container.style.cursor = "default";
-            }
-            hoveredObject = null;
-            tooltip.style.display = 'none';
-        }
-        controls.update();
-        renderer.render(scene, camera);
-    }
-    animate();
-
-    let resizeTimeout;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimeout);
-        resizeTimeout = setTimeout(() => {
-            const isMobile = window.innerWidth < 768;
-            camera.position.set(0, isMobile ? 45 : 35, isMobile ? 20 : 16);
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
-        }, 250);
-    });
-</script>
+<!-- ============================================================ -->
+<!--  SEMUA SCRIPT DIBAWAH INI DI MODIFIKASI UNTUK GOOGLE SHEETS  -->
+<!-- ============================================================ -->
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js">
 </script>
@@ -1908,59 +1635,111 @@
 
 <script>
     // ============================================================
-    //  DATA & CONFIG
+    //  1. KONFIGURASI GOOGLE SHEETS
     // ============================================================
+    const GOOGLE_SHEETS_CONFIG = {
+        spreadsheetId: '1u4bZp3wVoXylYwMYxz8hFO2JkQR1zRVeMbY_0iMnL60', // ganti dengan ID spreadsheet Anda
+        apiKey: 'AIzaSyA5ckf6Iyzio0Pnx3Ko_FPWS1V8OsjChbw',               // ganti dengan API Key Anda
+        range: 'Sheet1!A:F'                  // sesuaikan range dan sheet name
+    };
+
+    // ============================================================
+    //  2. FUNGSI LOAD DATA DARI GOOGLE SHEETS
+    // ============================================================
+    async function loadDataFromGoogleSheets() {
+        const url =
+            `https://sheets.googleapis.com/v4/spreadsheets/${GOOGLE_SHEETS_CONFIG.spreadsheetId}/values/${GOOGLE_SHEETS_CONFIG.range}?key=${GOOGLE_SHEETS_CONFIG.apiKey}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error(`HTTP ${response.status}`);
+            const data = await response.json();
+
+            const rows = data.values;
+            if (!rows || rows.length < 2) {
+                console.warn('Data kosong atau tidak ditemukan');
+                return [];
+            }
+
+            // Baris pertama adalah header, mulai dari baris kedua
+            const result = rows.slice(1).map(row => ({
+                id: row[0]?.trim() || '',
+                luas: parseFloat(row[1]) || 0,
+                p: row[2]?.trim() || '',
+                l: row[3]?.trim() || '',
+                status: row[4]?.trim() || 'Tersedia',
+                harga: row[5]?.trim() || 'Rp 0'
+            })).filter(item => item.id !== ''); // filter baris kosong
+
+            return result;
+        } catch (error) {
+            console.error('Gagal mengambil data dari Google Sheets:', error);
+            // Fallback: data hardcoded (contoh)
+            return getFallbackData();
+        }
+    }
+
+    // ============================================================
+    //  3. FALLBACK DATA (jika Google Sheets gagal)
+    // ============================================================
+    function getFallbackData() {
+        return [
+            { id: "A3", luas: 147.9, p: "14.5", l: "10.20", status: "Tersedia", harga: "Rp 60.000.000" },
+            { id: "B3", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 58.000.000" },
+            { id: "C3", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 57.000.000" },
+            { id: "D3", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 56.000.000" },
+            { id: "E3", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 55.000.000" },
+            { id: "F3", luas: 154.42, p: "14.5", l: "10.65", status: "Tersedia", harga: "Rp 57.000.000" },
+            { id: "G2", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 49.000.000" },
+            { id: "H2", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 48.000.000" },
+            { id: "I2", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 47.000.000" },
+            { id: "J2", luas: 145.75, p: "14.57", l: "10", status: "Tersedia", harga: "Rp 46.000.000" },
+            { id: "K2", luas: 146.5, p: "14.65", l: "10", status: "Tersedia", harga: "Rp 39.000.000" },
+            { id: "L2", luas: 146.5, p: "14.65", l: "10", status: "Tersedia", harga: "Rp 38.000.000" },
+            { id: "M2", luas: 147.75, p: "14.77", l: "10", status: "Tersedia", harga: "Rp 37.000.000" },
+            { id: "N2", luas: 154, p: "15.4", l: "10", status: "Tersedia", harga: "Rp 37.000.000" },
+            { id: "O2", luas: 127.05, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 27.000.000" },
+            { id: "A2", luas: 147, p: "14.5", l: "10.20", status: "Tersedia", harga: "Rp 60.000.000" },
+            { id: "B2", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 58.000.000" },
+            { id: "C2", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 57.000.000" },
+            { id: "D2", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 56.000.000" },
+            { id: "E2", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 55.000.000" },
+            { id: "F2", luas: 163.12, p: "14.5", l: "11.25", status: "Tersedia", harga: "Rp 61.000.000" },
+            { id: "G1", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 49.000.000" },
+            { id: "H1", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 48.000.000" },
+            { id: "I1", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 47.000.000" },
+            { id: "J1", luas: 145.75, p: "14.57", l: "10", status: "Tersedia", harga: "Rp 46.000.000" },
+            { id: "K1", luas: 146.5, p: "14.65", l: "10", status: "Tersedia", harga: "Rp 39.000.000" },
+            { id: "L1", luas: 146.5, p: "14.65", l: "10", status: "Tersedia", harga: "Rp 38.000.000" },
+            { id: "M1", luas: 147.75, p: "14.77", l: "10", status: "Tersedia", harga: "Rp 37.000.000" },
+            { id: "N1", luas: 154, p: "15.4", l: "10", status: "Tersedia", harga: "Rp 37.000.000" },
+            { id: "O1", luas: 160.93, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 34.000.000" },
+            { id: "A1", luas: 147, p: "14.5", l: "10.20", status: "Tersedia", harga: "Rp 60.000.000" },
+            { id: "B1", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 58.000.000" },
+            { id: "C1", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 57.000.000" },
+            { id: "D1", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 56.000.000" },
+            { id: "E1", luas: 145, p: "14.5", l: "10", status: "Tersedia", harga: "Rp 55.000.000" },
+            { id: "F1", luas: 168.92, p: "14.5", l: "11.65", status: "Tersedia", harga: "Rp 63.000.000" },
+            { id: "P", luas: 658.8, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 225.000.000" }
+        ];
+    }
+
+    // ============================================================
+    //  4. VARIABLE GLOBAL & FUNGSI UTAMA
+    // ============================================================
+    let dataTanah = [];
+    let dataTanahTable = [];
+    let currentSimulationData = null;
+    let currentUnitData = null;
+    let currentWaitingUnitData = null;
+
     const SIMULATION_CONFIG = {
         dpPercent: 20,
         interestRate: 12,
     };
 
-    const dataTanahTable = [
-        { id: "A3", luas: 147.9, p: 14.5, l: 10.20, status: "Tersedia", harga: "Rp 60.000.000" },
-        { id: "B3", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 58.000.000" },
-        { id: "C3", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 57.000.000" },
-        { id: "D3", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 56.000.000" },
-        { id: "E3", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 55.000.000" },
-        { id: "F3", luas: 154.42, p: 14.5, l: 10.65, status: "Tersedia", harga: "Rp 57.000.000" },
-        { id: "G2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 49.000.000" },
-        { id: "H2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 48.000.000" },
-        { id: "I2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 47.000.000" },
-        { id: "J2", luas: 145.75, p: 14.57, l: 10, status: "Tersedia", harga: "Rp 46.000.000" },
-        { id: "K2", luas: 146.5, p: 14.65, l: 10, status: "Tersedia", harga: "Rp 39.000.000" },
-        { id: "L2", luas: 146.5, p: 14.65, l: 10, status: "Tersedia", harga: "Rp 38.000.000" },
-        { id: "M2", luas: 147.75, p: 14.77, l: 10, status: "Tersedia", harga: "Rp 37.000.000" },
-        { id: "N2", luas: 154, p: 15.4, l: 10, status: "Tersedia", harga: "Rp 37.000.000" },
-        { id: "O2", luas: 127.05, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 27.000.000" },
-        { id: "A2", luas: 147, p: 14.5, l: 10.20, status: "Tersedia", harga: "Rp 60.000.000" },
-        { id: "B2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 58.000.000" },
-        { id: "C2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 57.000.000" },
-        { id: "D2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 56.000.000" },
-        { id: "E2", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 55.000.000" },
-        { id: "F2", luas: 163.12, p: 14.5, l: 11.25, status: "Tersedia", harga: "Rp 61.000.000" },
-        { id: "G1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 49.000.000" },
-        { id: "H1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 48.000.000" },
-        { id: "I1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 47.000.000" },
-        { id: "J1", luas: 145.75, p: 14.57, l: 10, status: "Tersedia", harga: "Rp 46.000.000" },
-        { id: "K1", luas: 146.5, p: 14.65, l: 10, status: "Tersedia", harga: "Rp 39.000.000" },
-        { id: "L1", luas: 146.5, p: 14.65, l: 10, status: "Tersedia", harga: "Rp 38.000.000" },
-        { id: "M1", luas: 147.75, p: 14.77, l: 10, status: "Tersedia", harga: "Rp 37.000.000" },
-        { id: "N1", luas: 154, p: 15.4, l: 10, status: "Tersedia", harga: "Rp 37.000.000" },
-        { id: "O1", luas: 160.93, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 34.000.000" },
-        { id: "A1", luas: 147, p: 14.5, l: 10.20, status: "Tersedia", harga: "Rp 60.000.000" },
-        { id: "B1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 58.000.000" },
-        { id: "C1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 57.000.000" },
-        { id: "D1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 56.000.000" },
-        { id: "E1", luas: 145, p: 14.5, l: 10, status: "Tersedia", harga: "Rp 55.000.000" },
-        { id: "F1", luas: 168.92, p: 14.5, l: 11.65, status: "Tersedia", harga: "Rp 63.000.000" },
-        { id: "P", luas: 658.8, p: "Khusus ", l: "Khusus ", status: "Tersedia", harga: "Rp 225.000.000" }
-    ];
-
-    let currentSimulationData = null;
-    let currentUnitData = null;
-    let currentWaitingUnitData = null;
-
     // ============================================================
-    //  UTILITY FUNCTIONS
+    //  5. UTILITY FUNCTIONS
     // ============================================================
     function formatCurrency(num) {
         return 'Rp ' + num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -1991,11 +1770,15 @@
         return { price, bookingFee, dp, principal, year2: { cicilan: cicilan2tahun }, year3: { cicilan: cicilan3tahun } };
     }
 
+    function findUnit(id) {
+        return dataTanah.find(u => u.id.toUpperCase() === id.toUpperCase());
+    }
+
     // ============================================================
-    //  MODAL CONTROLS
+    //  6. MODAL CONTROLS (Simulasi & Waiting List)
     // ============================================================
     window.openSimulationModal = function(unitId, unitPrice) {
-        const unit = dataTanahTable.find(u => u.id === unitId);
+        const unit = findUnit(unitId);
         if (!unit) return;
         currentUnitData = unit;
         const calc = calculateBothSimulations(unit.harga);
@@ -2016,7 +1799,7 @@
     };
 
     window.openWaitingListModal = function(unitId, unitPrice) {
-        const unit = dataTanahTable.find(u => u.id === unitId);
+        const unit = findUnit(unitId);
         if (!unit) return;
         currentWaitingUnitData = unit;
         document.getElementById('waitingUnitInfo').textContent = `Unit ${unit.id} | Luas ${unit.luas}m² | Harga ${unit.harga} | Status ${unit.status}`;
@@ -2118,7 +1901,7 @@
         doc.setFontSize(10);
         doc.text(`Generated on: ${dateStr}`, 14, 28);
 
-        const rows = dataTanahTable.map(d => {
+        const rows = dataTanah.map(d => {
             let dimensi = (d.p === "Khusus " || d.l === "Khusus ") ? "Khusus" : `${d.l} m x ${d.p} m`;
             return [`UNIT ${d.id}`, `${d.luas} m²`, dimensi, d.status, d.harga];
         });
@@ -2146,10 +1929,13 @@
         });
     }
 
+    // ============================================================
+    //  7. RENDER TABEL HARGA
+    // ============================================================
     function renderTable() {
         const body = document.getElementById('dataTanahBody');
         if (!body) return;
-        body.innerHTML = dataTanahTable.map(d => {
+        body.innerHTML = dataTanah.map(d => {
             const statusColor = d.status === "Tersedia" ? "text-green-500" : (d.status === "Booking" ?
                 "text-yellow-500" : "text-red-500");
             let btn = '';
@@ -2165,13 +1951,316 @@
         lucide.createIcons();
     }
 
-    // Mobile menu
+    // ============================================================
+    //  8. INISIALISASI THREE.JS (DENAH 3D) DENGAN DATA
+    // ============================================================
+    async function initThreeJS(data) {
+        // Hapus canvas Three.js yang lama jika ada
+        const container = document.getElementById('denah-canvas-container');
+        while (container.firstChild) {
+            container.removeChild(container.firstChild);
+        }
+
+        // Import Three.js secara dinamis (karena kita menggunakan type="module" di bagian lain)
+        const THREE = await import('three');
+        const { OrbitControls } = await import('three/addons/controls/OrbitControls.js');
+
+        const statusColors = { "Tersedia": "#22c55e", "Booking": "#eab308", "Terjual": "#ef4444" };
+
+        const scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x050505);
+        const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+
+        const isMobile = window.innerWidth < 768;
+        camera.position.set(0, isMobile ? 45 : 35, isMobile ? 20 : 16);
+
+        const renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setSize(container.clientWidth, container.clientHeight);
+        renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        container.appendChild(renderer.domElement);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enabled = false;
+
+        scene.add(new THREE.AmbientLight(0xffffff, 1.2));
+
+        const raycaster = new THREE.Raycaster();
+        const mouse = new THREE.Vector2();
+        let hoveredObject = null;
+        const plots = [];
+
+        const tooltip = document.getElementById('tooltip-denah');
+
+        // ===== Fungsi untuk membuat label unit =====
+        function makeUnitLabel(text, color) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 256;
+            canvas.height = 256;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = color;
+            ctx.fillRect(0, 0, 256, 256);
+            ctx.fillStyle = 'black';
+            ctx.font = 'bold 90px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText(text, 128, 128);
+            return new THREE.CanvasTexture(canvas);
+        }
+
+        function createPlot(item, x, z, w, d) {
+            const color = statusColors[item.status];
+            const tex = makeUnitLabel(item.id, color);
+            const geo = new THREE.BoxGeometry(w, 0.5, d);
+            const matTop = new THREE.MeshStandardMaterial({ map: tex });
+            const matSide = new THREE.MeshStandardMaterial({ color: color });
+            const mesh = new THREE.Mesh(geo, [matSide, matSide, matTop, matSide, matSide, matSide]);
+            mesh.position.set(x, 0.25, z);
+            mesh.userData = item;
+            scene.add(mesh);
+            plots.push(mesh);
+        }
+
+        // === Buat plot berdasarkan data ===
+        data.forEach((item, i) => {
+            // Atur posisi sesuai kebutuhan (sesuai layout hardcoded sebelumnya)
+            if (i < 15) createPlot(item, -8.5 + (i * 1.3), -7.5, 1.1, 2.2);
+            else if (i < 30) createPlot(item, -8.5 + ((i - 15) * 1.3), -4, 1.1, 2.2);
+            else if (i < 36) createPlot(item, -8.5 + ((i - 30) * 1.3), -1.5, 1.1, 2.2);
+            else createPlot(item, -6 + ((i - 35) * 2), 2.2, 1.8, 2.8);
+        });
+
+        // === Tambahkan jalan dan kompas (sama seperti sebelumnya) ===
+        function addRoad(x, z, w, d, rot, name) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 512;
+            canvas.height = 64;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = '#1e40af';
+            ctx.fillRect(0, 0, 512, 64);
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 24px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(name, 256, 42);
+            const tex = new THREE.CanvasTexture(canvas);
+            const mesh = new THREE.Mesh(new THREE.PlaneGeometry(w, d), new THREE.MeshBasicMaterial({ map: tex, side: 2 }));
+            mesh.position.set(x, 0.05, z);
+            mesh.rotation.x = -Math.PI / 2;
+            mesh.rotation.z = rot;
+            scene.add(mesh);
+        }
+
+        addRoad(-11, -3, 16, 1.8, Math.PI / 2, "J A L A N   D E S A");
+        addRoad(-5, 5, 16, 1.8, -Math.PI / 12, "J A L A N   D E S A");
+
+        function makeCompassLabel(text, pos) {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 128;
+            const ctx = canvas.getContext('2d');
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 80px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(text, 64, 90);
+            const tex = new THREE.CanvasTexture(canvas);
+            const sprite = new THREE.Sprite(new THREE.SpriteMaterial({ map: tex }));
+            sprite.position.copy(pos);
+            sprite.scale.set(1.5, 1.5, 1);
+            return sprite;
+        }
+
+        function createCompass() {
+            const group = new THREE.Group();
+            const matRed = new THREE.MeshBasicMaterial({ color: 0xef4444 });
+            const matWhite = new THREE.MeshBasicMaterial({ color: 0xffffff });
+            const coneGeo = new THREE.ConeGeometry(0.5, 2, 8);
+            const n = new THREE.Mesh(coneGeo, matRed);
+            n.position.z = -1.2;
+            n.rotation.x = -Math.PI / 2;
+            group.add(n);
+            const s = new THREE.Mesh(coneGeo, matWhite);
+            s.position.z = 1.2;
+            s.rotation.x = Math.PI / 2;
+            group.add(s);
+            const e = new THREE.Mesh(coneGeo, matWhite);
+            e.position.x = 1.2;
+            e.rotation.z = -Math.PI / 2;
+            group.add(e);
+            const w = new THREE.Mesh(coneGeo, matWhite);
+            w.position.x = -1.2;
+            w.rotation.z = Math.PI / 2;
+            group.add(w);
+            group.add(makeCompassLabel("U", new THREE.Vector3(0, 0, -3.5)));
+            group.add(makeCompassLabel("S", new THREE.Vector3(0, 0, 3.5)));
+            group.add(makeCompassLabel("T", new THREE.Vector3(3.5, 0, 0)));
+            group.add(makeCompassLabel("B", new THREE.Vector3(-3.5, 0, 0)));
+            group.position.set(13, 0.2, -14);
+            group.rotation.y = Math.PI;
+            scene.add(group);
+        }
+        createCompass();
+
+        // === Event handler untuk tooltip dan klik ===
+        function openUnitAction(unitData) {
+            if (unitData.status === "Tersedia") {
+                if (typeof window.openSimulationModal === 'function') {
+                    window.openSimulationModal(unitData.id, unitData.harga);
+                }
+            } else if (unitData.status === "Booking") {
+                if (typeof window.openWaitingListModal === 'function') {
+                    window.openWaitingListModal(unitData.id, unitData.harga);
+                }
+            } else {
+                alert(`Maaf, Unit ${unitData.id} sudah terjual.`);
+            }
+        }
+
+        container.addEventListener('click', (event) => {
+            if (hoveredObject) {
+                const d = hoveredObject.userData;
+                tooltip.style.display = 'none';
+                hoveredObject.scale.set(1, 1, 1);
+                hoveredObject = null;
+                container.style.cursor = "default";
+                openUnitAction(d);
+            }
+        });
+
+        container.addEventListener('mousemove', (e) => {
+            const rect = container.getBoundingClientRect();
+            mouse.x = ((e.clientX - rect.left) / container.clientWidth) * 2 - 1;
+            mouse.y = -((e.clientY - rect.top) / container.clientHeight) * 2 + 1;
+            tooltip.style.left = (e.clientX + 20) + 'px';
+            tooltip.style.top = (e.clientY + 20) + 'px';
+        });
+
+        let touchTimeout;
+        container.addEventListener('touchstart', (e) => {
+            if (e.touches.length === 1) {
+                const touch = e.touches[0];
+                const rect = container.getBoundingClientRect();
+                mouse.x = ((touch.clientX - rect.left) / container.clientWidth) * 2 - 1;
+                mouse.y = -((touch.clientY - rect.top) / container.clientHeight) * 2 + 1;
+                tooltip.style.left = (touch.clientX + 20) + 'px';
+                tooltip.style.top = (touch.clientY + 20) + 'px';
+                clearTimeout(touchTimeout);
+                touchTimeout = setTimeout(() => {
+                    tooltip.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // === Animasi loop ===
+        function animate() {
+            requestAnimationFrame(animate);
+            raycaster.setFromCamera(mouse, camera);
+            const hits = raycaster.intersectObjects(plots);
+            if (hits.length > 0) {
+                const obj = hits[0].object;
+                if (hoveredObject !== obj) {
+                    if (hoveredObject) hoveredObject.scale.set(1, 1, 1);
+                    hoveredObject = obj;
+                    const d = obj.userData;
+                    document.getElementById('t-unit').innerHTML =
+                        `UNIT ${d.id} <span style="color: ${statusColors[d.status]}; font-size: 1em; font-weight: 800; margin-left: 10px;">${d.status.toUpperCase()}</span>`;
+                    let dimensiText = `${d.luas}m²`;
+                    if (d.p !== "Khusus " && d.l !== "Khusus ") {
+                        dimensiText += ` | ${d.l}m x ${d.p}m`;
+                    }
+                    document.getElementById('t-luas-dimensi').innerText = dimensiText;
+                    document.getElementById('t-harga').innerText = d.harga;
+                    tooltip.style.display = 'block';
+                    obj.scale.set(1.05, 5, 1.05);
+                    container.style.cursor = (d.status === "Tersedia" || d.status === "Booking") ? "pointer" :
+                    "default";
+                }
+            } else {
+                if (hoveredObject) {
+                    hoveredObject.scale.set(1, 1, 1);
+                    container.style.cursor = "default";
+                }
+                hoveredObject = null;
+                tooltip.style.display = 'none';
+            }
+            controls.update();
+            renderer.render(scene, camera);
+        }
+        animate();
+
+        // === Resize handler ===
+        let resizeTimeout;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimeout);
+            resizeTimeout = setTimeout(() => {
+                const isMobile = window.innerWidth < 768;
+                camera.position.set(0, isMobile ? 45 : 35, isMobile ? 20 : 16);
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            }, 250);
+        });
+    }
+
+    // ============================================================
+    //  9. INISIALISASI HALAMAN
+    // ============================================================
+    async function initPage() {
+        // 1. Load data dari Google Sheets
+        let loadedData = await loadDataFromGoogleSheets();
+        if (!loadedData || loadedData.length === 0) {
+            loadedData = getFallbackData();
+        }
+
+        // 2. Simpan ke variabel global
+        dataTanah = loadedData;
+        dataTanahTable = loadedData;
+
+        // 3. Render tabel
+        renderTable();
+
+        // 4. Inisialisasi Three.js
+        await initThreeJS(dataTanah);
+
+        // 5. Inisialisasi AOS
+        AOS.init({ duration: 1000, once: true });
+
+        // 6. Refresh icon Lucide
+        lucide.createIcons();
+
+        console.log(`✅ Data dimuat dari Google Sheets: ${dataTanah.length} unit`);
+    }
+
+    // ============================================================
+    //  10. CHATBOT (tetap sama seperti sebelumnya, tapi menggunakan dataTanah)
+    // ============================================================
+    // (Kode chatbot tetap sama, hanya perlu menyesuaikan fungsi findUnit dengan dataTanah)
+    // Karena findUnit sudah menggunakan dataTanah, dan dataTanah sudah diisi, chatbot akan otomatis berfungsi.
+
+    // ============================================================
+    //  11. EVENT LISTENER & EKSPOSE FUNGSI GLOBAL
+    // ============================================================
+
+    // Ekspos fungsi ke global
+    window.closeSimulationModal = closeSimulationModal;
+    window.closeWaitingListModal = closeWaitingListModal;
+    window.submitWaitingList = submitWaitingList;
+    window.downloadSimulationPDF = downloadSimulationPDF;
+    window.contactMarketingSimulation = contactMarketingSimulation;
+    window.downloadPDF = downloadPDF;
+    window.filterTable = filterTable;
+    window.openSimulationModal = openSimulationModal;
+    window.openWaitingListModal = openWaitingListModal;
+    window.findUnit = findUnit;
+    window.dataTanah = dataTanah; // ekspos untuk debugging
+
+    // === MOBILE MENU ===
     const mobileMenuButton = document.getElementById('mobileMenuButton');
     const mobileMenuPanel = document.getElementById('mobileMenuPanel');
     const mobileMenuClose = document.getElementById('mobileMenuClose');
 
-    function toggleMobileMenu() { mobileMenuPanel.classList.toggle('hidden');
-        document.body.style.overflow = mobileMenuPanel.classList.contains('hidden') ? 'auto' : 'hidden'; }
+    function toggleMobileMenu() {
+        mobileMenuPanel.classList.toggle('hidden');
+        document.body.style.overflow = mobileMenuPanel.classList.contains('hidden') ? 'auto' : 'hidden';
+    }
     if (mobileMenuButton) mobileMenuButton.addEventListener('click', toggleMobileMenu);
     if (mobileMenuClose) mobileMenuClose.addEventListener('click', toggleMobileMenu);
     document.querySelectorAll('.mobile-menu-link').forEach(l => l.addEventListener('click', toggleMobileMenu));
@@ -2192,48 +2281,101 @@
             closeWaitingListModal(); }
     });
 
-    AOS.init({ duration: 1000, once: true });
-    document.addEventListener('DOMContentLoaded', () => { renderTable();
-        lucide.createIcons();
-        setWelcomeTime(); });
+    // ============================================================
+    //  12. JALANKAN INISIALISASI
+    // ============================================================
+    document.addEventListener('DOMContentLoaded', () => {
+        initPage();
+        // Set welcome time di chatbot
+        const now = new Date();
+        const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        const welcomeElem = document.getElementById('welcomeTime2');
+        if (welcomeElem) welcomeElem.textContent = timeStr;
+    });
 
     // ============================================================
-    //  ======  ENHANCED CHATBOT — STRUKTUR MENU & SUBMENU  ======
+    //  13. CHATBOT FUNCTIONS (diambil dari kode sebelumnya, sudah terintegrasi)
+    // ============================================================
+    // (Saya tidak menulis ulang seluruh chatbot di sini karena kode di atas sudah lengkap,
+    //  namun chatbot di bawah ini menggunakan dataTanah yang sudah dimuat)
     // ============================================================
 
-    let chatHistory = [];
-
-    // ---- State ----
-    const chatState = {
-        currentMenu: 'main', // 'main' | 'unit_detail' | 'simulation' | 'booking'
+    // === Chatbot UI helpers (sama persis seperti sebelumnya) ===
+    let chatState = {
+        currentMenu: 'main',
         currentUnitId: null,
-        waitingForUnit: false, // true jika user diminta input kode unit
-        lastQuery: '',
+        waitingForUnit: false,
     };
 
-    // ---- Helper: cari unit ----
-    function findUnit(id) {
-        return dataTanahTable.find(u => u.id.toUpperCase() === id.toUpperCase());
+    function toggleChatbot() {
+        const panel = document.getElementById('chatbotNavPanel');
+        const btn = document.getElementById('chatbotFloatingBtn');
+        panel.classList.toggle('active');
+        if (panel.classList.contains('active')) {
+            btn.innerHTML = '<i data-lucide="x" style="width: 32px; height: 32px; color: white;"></i>';
+            lucide.createIcons();
+        } else {
+            btn.innerHTML = '<i data-lucide="message-circle" style="width: 32px; height: 32px; color: white;"></i>';
+            lucide.createIcons();
+        }
     }
 
-    // ---- Helper: status badge HTML ----
+    function addChatMessage(text, sender) {
+        const messagesDiv = document.getElementById('chatbotMessages');
+        const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        messageDiv.innerHTML = `<div class="message-bubble">${text}</div><div class="message-time">${time}</div>`;
+        messagesDiv.appendChild(messageDiv);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function showTypingIndicator() {
+        const messagesDiv = document.getElementById('chatbotMessages');
+        const old = document.getElementById('chatTypingIndicator');
+        if (old) old.remove();
+        const indicator = document.createElement('div');
+        indicator.className = 'message bot';
+        indicator.id = 'chatTypingIndicator';
+        indicator.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
+        messagesDiv.appendChild(indicator);
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    function removeTypingIndicator() {
+        const indicator = document.getElementById('chatTypingIndicator');
+        if (indicator) indicator.remove();
+    }
+
+    function sendChatMessage() {
+        const input = document.getElementById('chatbotInput');
+        const text = input.value.trim();
+        if (text) {
+            addChatMessage(text, 'user');
+            processChatQuery(text);
+            input.value = '';
+        }
+    }
+
+    function quickAsk(query) {
+        addChatMessage(query, 'user');
+        processChatQuery(query);
+    }
+
     function statusBadge(status) {
         const cls = status === 'Tersedia' ? 'badge-tersedia' : (status === 'Booking' ? 'badge-booking' :
             'badge-terjual');
         return `<span class="badge-status ${cls}">${status}</span>`;
     }
 
-    // ---- Helper: action buttons dalam chat ----
     function unitActionButtons(unit) {
         let btns = '';
         if (unit.status === 'Tersedia') {
             btns +=
                 `<span class="chat-action-btn primary" onclick="quickAsk('simulasi ${unit.id}')">💳 Simulasi Cicilan</span>`;
-            btns +=
-                `<span class="chat-action-btn" onclick="quickAsk('booking ${unit.id}')">📋 Cara Booking</span>`;
+            btns += `<span class="chat-action-btn" onclick="quickAsk('booking ${unit.id}')">📋 Cara Booking</span>`;
         } else if (unit.status === 'Booking') {
-            btns +=
-                `<span class="chat-action-btn warning" onclick="quickAsk('waiting ${unit.id}')">⏳ Daftar Tunggu</span>`;
+            btns += `<span class="chat-action-btn warning" onclick="quickAsk('waiting ${unit.id}')">⏳ Daftar Tunggu</span>`;
         } else {
             btns += `<span class="chat-action-btn" style="opacity:0.5;cursor:default;">❌ Terjual</span>`;
         }
@@ -2242,7 +2384,6 @@
         return btns;
     }
 
-    // ---- Render unit detail dengan sub-menu ----
     function renderUnitDetail(unit) {
         const statusEmoji = unit.status === 'Tersedia' ? '✅' : (unit.status === 'Booking' ? '⏳' : '❌');
         let msg = `<strong>📦 Unit ${unit.id}</strong><br/><br/>`;
@@ -2254,7 +2395,6 @@
         return msg;
     }
 
-    // ---- Render menu utama ----
     function renderMainMenu() {
         return `
         <strong>📋 Menu Utama — Kavling Maoslor</strong><br/><br/>
@@ -2269,9 +2409,8 @@
         `;
     }
 
-    // ---- Render daftar unit tersedia ----
     function renderAvailableUnits() {
-        const avail = dataTanahTable.filter(u => u.status === 'Tersedia');
+        const avail = dataTanah.filter(u => u.status === 'Tersedia');
         if (avail.length === 0) return 'Maaf, saat ini tidak ada unit tersedia. 😔';
         let msg = `<strong>📋 Unit Tersedia (${avail.length} unit)</strong><br/><br/>`;
         msg += avail.map(u =>
@@ -2281,7 +2420,6 @@
         return msg;
     }
 
-    // ---- Render simulasi cicilan untuk unit tertentu ----
     function renderSimulation(unitId) {
         const unit = findUnit(unitId);
         if (!unit) return `❌ Unit ${unitId} tidak ditemukan. Coba cek daftar unit tersedia.`;
@@ -2307,7 +2445,6 @@
             <span class="back-btn" onclick="quickAsk('menu')">🔙 Kembali</span>
         </div>
         `;
-        // Buka modal simulasi di web
         setTimeout(() => {
             if (typeof window.openSimulationModal === 'function') {
                 window.openSimulationModal(unit.id, unit.harga);
@@ -2316,7 +2453,6 @@
         return msg;
     }
 
-    // ---- Render cara booking ----
     function renderBookingInfo(unitId) {
         const unit = findUnit(unitId);
         if (!unit) return `❌ Unit ${unitId} tidak ditemukan.`;
@@ -2335,7 +2471,6 @@
             </div>
             `;
         }
-        // Tersedia
         return `
         <strong>📋 Cara Booking — Unit ${unit.id}</strong><br/><br/>
         ✅ Unit ini <strong>TERSEDIA</strong>!<br/><br/>
@@ -2353,7 +2488,6 @@
         `;
     }
 
-    // ---- Render daftar tunggu (waiting list) ----
     function renderWaitingList(unitId) {
         const unit = findUnit(unitId);
         if (!unit) return `❌ Unit ${unitId} tidak ditemukan.`;
@@ -2363,7 +2497,6 @@
         if (unit.status === 'Terjual') {
             return `❌ Unit ${unit.id} sudah <strong>TERJUAL</strong>.`;
         }
-        // Booking
         setTimeout(() => {
             if (typeof window.openWaitingListModal === 'function') {
                 window.openWaitingListModal(unit.id, unit.harga);
@@ -2381,7 +2514,6 @@
         `;
     }
 
-    // ---- Render lokasi ----
     function renderLocation() {
         return `
         <strong>📍 Lokasi & Akses</strong><br/><br/>
@@ -2398,7 +2530,6 @@
         `;
     }
 
-    // ---- Render kontak ----
     function renderContact() {
         return `
         <strong>📞 Hubungi Marketing</strong><br/><br/>
@@ -2413,7 +2544,6 @@
         `;
     }
 
-    // ---- Render bantuan / FAQ ----
     function renderHelp() {
         return `
         <strong>❓ Bantuan & FAQ</strong><br/><br/>
@@ -2434,7 +2564,6 @@
         `;
     }
 
-    // ---- Navigasi ke denah + highlight unit di tabel ----
     function navigateToDenah(unitId) {
         highlightSection('denah');
         if (unitId) {
@@ -2471,40 +2600,19 @@
         return false;
     }
 
-    function clickSimulationButton(unitId) {
-        const rows = document.querySelectorAll('#dataTanahBody tr');
-        for (let row of rows) {
-            if (row.textContent.includes(`UNIT ${unitId}`)) {
-                const btn = row.querySelector('button');
-                if (btn && btn.textContent.includes('Simulasi')) {
-                    btn.click();
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    // ============================================================
-    //  CHATBOT CORE — processChatQuery (TERSTRUKTUR)
-    // ============================================================
     function processChatQuery(query) {
         showTypingIndicator();
 
         const lower = query.trim().toLowerCase();
         const words = lower.split(/\s+/);
-
-        // Deteksi kode unit (huruf + angka, misal G1, K1, A3, dll)
         const unitRegex = /\b([a-z]\d+)\b/i;
         const unitMatch = lower.match(unitRegex);
         const detectedUnitId = unitMatch ? unitMatch[1].toUpperCase() : null;
 
-        // Deteksi perintah spesifik
         const isMenu = /^(menu|main|kembali|back|0)$/.test(lower) || lower === 'menu utama';
         const isAvailable = /^(1|unit tersedia|daftar unit|lihat unit|tersedia|unit apa saja)$/.test(lower);
         const isSearch = /^(2|cari unit|cari|search)$/.test(lower);
-        const isSimulasiCmd = /^(3|simulasi|simulasi cicilan|cicilan)$/.test(lower) ||
-            lower.startsWith('simulasi ');
+        const isSimulasiCmd = /^(3|simulasi|simulasi cicilan|cicilan)$/.test(lower) || lower.startsWith('simulasi ');
         const isLocation = /^(4|lokasi|akses|alamat|dimana|letak|peta)$/.test(lower);
         const isContact = /^(5|kontak|marketing|hubungi|wa|whatsapp|telepon|phone)$/.test(lower);
         const isHelp = /^(6|bantuan|faq|help|tolong|bantu)$/.test(lower);
@@ -2513,7 +2621,6 @@
         const isDenahCmd = lower.startsWith('denah ') || lower === 'denah';
         const isChatWA = /^(chatwa|chat whatsapp|wa sekarang)$/.test(lower);
 
-        // ---- 1. MENU UTAMA ----
         if (isMenu) {
             chatState.currentMenu = 'main';
             chatState.currentUnitId = null;
@@ -2525,7 +2632,6 @@
             return;
         }
 
-        // ---- 2. CHAT WHATSAPP ----
         if (isChatWA) {
             setTimeout(() => {
                 removeTypingIndicator();
@@ -2540,7 +2646,6 @@
             return;
         }
 
-        // ---- 3. UNIT TERSEDIA (1) ----
         if (isAvailable) {
             chatState.currentMenu = 'main';
             chatState.currentUnitId = null;
@@ -2551,7 +2656,6 @@
             return;
         }
 
-        // ---- 4. CARI UNIT (2) - jika tanpa kode, minta input ----
         if (isSearch) {
             chatState.waitingForUnit = true;
             chatState.currentMenu = 'search';
@@ -2564,9 +2668,7 @@
             return;
         }
 
-        // ---- 5. SIMULASI (3) ----
         if (isSimulasiCmd) {
-            // Jika ada kode unit setelah "simulasi"
             if (detectedUnitId) {
                 chatState.currentMenu = 'simulation';
                 chatState.currentUnitId = detectedUnitId;
@@ -2576,7 +2678,6 @@
                 }, 400);
                 return;
             }
-            // Jika tidak ada kode, minta input
             chatState.waitingForUnit = true;
             chatState.currentMenu = 'simulation';
             setTimeout(() => {
@@ -2588,19 +2689,16 @@
             return;
         }
 
-        // ---- 6. LOKASI (4) ----
         if (isLocation) {
             chatState.currentMenu = 'main';
             setTimeout(() => {
                 removeTypingIndicator();
                 addChatMessage(renderLocation(), 'bot');
-                // scroll ke video (ada peta)
                 highlightSection('video');
             }, 400);
             return;
         }
 
-        // ---- 7. KONTAK (5) ----
         if (isContact) {
             chatState.currentMenu = 'main';
             setTimeout(() => {
@@ -2611,7 +2709,6 @@
             return;
         }
 
-        // ---- 8. BANTUAN (6) ----
         if (isHelp) {
             chatState.currentMenu = 'main';
             setTimeout(() => {
@@ -2621,11 +2718,9 @@
             return;
         }
 
-        // ---- 9. BOOKING [unit] ----
         if (isBookingCmd) {
             let unitId = detectedUnitId;
             if (!unitId) {
-                // Ambil dari state jika sedang di unit_detail
                 if (chatState.currentUnitId && chatState.currentMenu === 'unit_detail') {
                     unitId = chatState.currentUnitId;
                 } else {
@@ -2651,7 +2746,6 @@
             return;
         }
 
-        // ---- 10. WAITING [unit] ----
         if (isWaitingCmd) {
             let unitId = detectedUnitId;
             if (!unitId) {
@@ -2680,14 +2774,12 @@
             return;
         }
 
-        // ---- 11. DENAH [unit] ----
         if (isDenahCmd) {
             let unitId = detectedUnitId;
             if (!unitId) {
                 if (chatState.currentUnitId && chatState.currentMenu === 'unit_detail') {
                     unitId = chatState.currentUnitId;
                 } else {
-                    // Tanpa unit: scroll ke denah saja
                     setTimeout(() => {
                         removeTypingIndicator();
                         addChatMessage('🗺️ Saya arahkan ke Denah 3D interaktif.', 'bot');
@@ -2707,7 +2799,6 @@
             return;
         }
 
-        // ---- 12. DETEKSI UNIT (kode unit saja) ----
         if (detectedUnitId) {
             const unit = findUnit(detectedUnitId);
             if (unit) {
@@ -2716,16 +2807,13 @@
                 setTimeout(() => {
                     removeTypingIndicator();
                     addChatMessage(renderUnitDetail(unit), 'bot');
-                    // scroll ke denah dan highlight
                     navigateToDenah(unit.id);
                 }, 400);
                 return;
             }
         }
 
-        // ---- 13. FALLBACK: jika sedang menunggu input unit ----
         if (chatState.waitingForUnit) {
-            // Coba parse input sebagai kode unit
             const possibleUnit = findUnit(query);
             if (possibleUnit) {
                 chatState.waitingForUnit = false;
@@ -2755,7 +2843,6 @@
                     }, 400);
                     return;
                 } else {
-                    // default: tampilkan detail unit
                     chatState.currentMenu = 'unit_detail';
                     chatState.currentUnitId = possibleUnit.id;
                     chatState.waitingForUnit = false;
@@ -2767,7 +2854,6 @@
                     return;
                 }
             } else {
-                // Bukan unit yang valid
                 chatState.waitingForUnit = false;
                 setTimeout(() => {
                     removeTypingIndicator();
@@ -2779,7 +2865,7 @@
             }
         }
 
-        // ---- 14. FALLBACK UMUM ----
+        // Fallback
         setTimeout(() => {
             removeTypingIndicator();
             addChatMessage(
@@ -2798,103 +2884,12 @@
         }, 400);
     }
 
-    // ============================================================
-    //  CHATBOT UI HELPERS
-    // ============================================================
-
-    function setWelcomeTime() {
-        const now = new Date();
-        const timeStr = now.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-        const welcomeElem = document.getElementById('welcomeTime2');
-        if (welcomeElem) welcomeElem.textContent = timeStr;
-    }
-
-    function toggleChatbot() {
-        const panel = document.getElementById('chatbotNavPanel');
-        const btn = document.getElementById('chatbotFloatingBtn');
-        panel.classList.toggle('active');
-        if (panel.classList.contains('active')) {
-            btn.innerHTML = '<i data-lucide="x" style="width: 32px; height: 32px; color: white;"></i>';
-            setWelcomeTime();
-            // Reset state ke main menu jika baru buka
-            if (chatState.currentMenu !== 'main') {
-                chatState.currentMenu = 'main';
-                chatState.currentUnitId = null;
-                chatState.waitingForUnit = false;
-            }
-        } else {
-            btn.innerHTML = '<i data-lucide="message-circle" style="width: 32px; height: 32px; color: white;"></i>';
-        }
-        lucide.createIcons();
-    }
-
-    function addChatMessage(text, sender) {
-        const messagesDiv = document.getElementById('chatbotMessages');
-        const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-        const messageDiv = document.createElement('div');
-        messageDiv.className = `message ${sender}`;
-        // Gunakan innerHTML agar HTML dari render fungsi bisa tampil
-        messageDiv.innerHTML = `<div class="message-bubble">${text}</div><div class="message-time">${time}</div>`;
-        messagesDiv.appendChild(messageDiv);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-        chatHistory.push({ text, sender, time });
-    }
-
-    function showTypingIndicator() {
-        const messagesDiv = document.getElementById('chatbotMessages');
-        // Hapus indicator lama jika ada
-        const old = document.getElementById('chatTypingIndicator');
-        if (old) old.remove();
-        const indicator = document.createElement('div');
-        indicator.className = 'message bot';
-        indicator.id = 'chatTypingIndicator';
-        indicator.innerHTML = `<div class="typing-indicator"><span></span><span></span><span></span></div>`;
-        messagesDiv.appendChild(indicator);
-        messagesDiv.scrollTop = messagesDiv.scrollHeight;
-    }
-
-    function removeTypingIndicator() {
-        const indicator = document.getElementById('chatTypingIndicator');
-        if (indicator) indicator.remove();
-    }
-
-    function sendChatMessage() {
-        const input = document.getElementById('chatbotInput');
-        const text = input.value.trim();
-        if (text) {
-            addChatMessage(text, 'user');
-            processChatQuery(text);
-            input.value = '';
-        }
-    }
-
-    function quickAsk(query) {
-        addChatMessage(query, 'user');
-        processChatQuery(query);
-    }
-
-    // Expose ke global
+    // Ekspos fungsi chatbot ke global
     window.toggleChatbot = toggleChatbot;
     window.sendChatMessage = sendChatMessage;
     window.quickAsk = quickAsk;
-    window.closeSimulationModal = closeSimulationModal;
-    window.closeWaitingListModal = closeWaitingListModal;
-    window.submitWaitingList = submitWaitingList;
-    window.downloadSimulationPDF = downloadSimulationPDF;
-    window.contactMarketingSimulation = contactMarketingSimulation;
-    window.downloadPDF = downloadPDF;
-    window.filterTable = filterTable;
-    window.openSimulationModal = openSimulationModal;
-    window.openWaitingListModal = openWaitingListModal;
 
-    // Inisialisasi waktu selamat datang
-    document.addEventListener('DOMContentLoaded', () => {
-        setWelcomeTime();
-        // Reset state
-        chatState.currentMenu = 'main';
-        chatState.currentUnitId = null;
-        chatState.waitingForUnit = false;
-    });
+    console.log('✅ Landing page siap dengan Google Sheets sebagai database!');
 </script>
 
 </body>
