@@ -1166,7 +1166,7 @@
     <div class="modal-content">
         <div class="sticky top-0 bg-[#0a0a0a] border-b border-white/10 p-4 md:p-6 flex justify-between items-center z-10">
             <div>
-                <h3 class="text-lg md:text-2xl font-bold text-white">Simulasi Pembayaran Cicilan</h3>
+                <h3 class="text-lg md:text-2xl font-bold text-white">Simulasi Pembayaran</h3>
                 <p class="text-xs md:text-sm text-gray-400 mt-1" id="modalUnitInfo">Unit -</p>
             </div>
             <button onclick="closeSimulationModal()" class="touch-friendly p-2 hover:bg-white/10 rounded-full transition">
@@ -1175,55 +1175,132 @@
         </div>
 
         <div class="p-4 md:p-6 space-y-4">
-            <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 flex items-center justify-between">
-                <div class="flex items-center gap-2">
-                    <i data-lucide="ticket" class="w-4 h-4 text-blue-400"></i>
-                    <span class="text-xs md:text-sm text-gray-300">Administrasi (Dibayar diawal)</span>
-                </div>
-                <span class="text-sm md:text-base font-bold text-blue-400" id="simBookingFee">Rp 1.500.000</span>
+
+            <!-- ===== TABS PILIH SKEMA ===== -->
+            <div class="flex gap-2 bg-black/40 p-1.5 rounded-xl border border-white/10">
+                <button onclick="switchScheme('cicilan')" id="tab-cicilan"
+                    class="flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition text-white bg-indigo-600">
+                    💳 Cicilan Reguler
+                </button>
+                <button onclick="switchScheme('investasi')" id="tab-investasi"
+                    class="flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition text-gray-400 hover:text-white">
+                    📊 Investasi Cicilan
+                </button>
             </div>
 
-            <div class="overflow-hidden rounded-xl border border-white/10">
-                <table class="w-full text-left border-collapse">
-                    <thead>
-                        <tr class="bg-indigo-600/20 text-indigo-400 text-xs md:text-sm font-bold">
-                            <th class="p-2 md:p-3 border-b border-white/10 border-r w-[35%]">Komponen</th>
-                            <th class="p-2 md:p-3 border-b border-white/10 border-r text-center w-[32.5%]">2 Tahun</th>
-                            <th class="p-2 md:p-3 border-b border-white/10 text-center w-[32.5%]">3 Tahun</th>
-                        </tr>
-                    </thead>
-                    <tbody class="text-[11px] md:text-sm divide-y divide-white/5">
-                        <tr class="hover:bg-white/5">
-                            <td class="p-2 md:p-3 border-r border-white/5 font-medium text-gray-300">Harga</td>
-                            <td class="p-2 md:p-3 border-r border-white/5 text-center text-white font-semibold" id="col1Harga">-</td>
-                            <td class="p-2 md:p-3 text-center text-white font-semibold" id="col2Harga">-</td>
-                        </tr>
-                        <tr class="hover:bg-white/5">
-                            <td class="p-2 md:p-3 border-r border-white/5 font-medium text-gray-300">DP 20% (dibayar di awal)</td>
-                            <td class="p-2 md:p-3 border-r border-white/5 text-center text-white" id="col1DP">-</td>
-                            <td class="p-2 md:p-3 text-center text-white" id="col2DP">-</td>
-                        </tr>
-                        <tr class="hover:bg-white/5">
-                            <td class="p-2 md:p-3 border-r border-white/5 font-medium text-gray-300">Pokok Cicilan</td>
-                            <td class="p-2 md:p-3 border-r border-white/5 text-center text-white" id="col1Pinjaman">-</td>
-                            <td class="p-2 md:p-3 text-center text-white" id="col2Pinjaman">-</td>
-                        </tr>
-                        <tr class="bg-emerald-500/10 font-bold">
-                            <td class="p-2 md:p-3 border-r border-white/5 font-bold text-emerald-400">Cicilan/Bulan</td>
-                            <td class="p-2 md:p-3 border-r border-white/5 text-center text-emerald-400 text-sm md:text-base font-bold" id="col1Cicilan">-</td>
-                            <td class="p-2 md:p-3 text-center text-emerald-400 text-sm md:text-base font-bold" id="col2Cicilan">-</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
+            <!-- ===== SKEMA 1: CICILAN REGULER ===== -->
+            <div id="scheme-cicilan">
+                <div class="bg-blue-500/10 border border-blue-500/20 rounded-lg p-3 flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="ticket" class="w-4 h-4 text-blue-400"></i>
+                        <span class="text-xs md:text-sm text-gray-300">Administrasi (Dibayar diawal)</span>
+                    </div>
+                    <span class="text-sm md:text-base font-bold text-blue-400" id="simBookingFee">Rp 1.500.000</span>
+                </div>
 
-            <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 text-xs text-yellow-200/80 flex items-start gap-2">
-                <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
-                <div class="space-y-1">
-                    <p>Disarankan pengambilan jangka waktu Cicilan 3 tahun agar cicilan bulanan lebih ringan.</p>
-                    <p class="text-yellow-400/60 text-[10px] md:text-xs">*Administrasi, DP dan Cicilan pertama dibayar sekali diawal sebagai tanda jadi pemesanan</p>
+                <div class="overflow-hidden rounded-xl border border-white/10">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-indigo-600/20 text-indigo-400 text-xs md:text-sm font-bold">
+                                <th class="p-2 md:p-3 border-b border-white/10 border-r w-[35%]">Komponen</th>
+                                <th class="p-2 md:p-3 border-b border-white/10 border-r text-center w-[32.5%]">2 Tahun</th>
+                                <th class="p-2 md:p-3 border-b border-white/10 text-center w-[32.5%]">3 Tahun</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-[11px] md:text-sm divide-y divide-white/5">
+                            <tr class="hover:bg-white/5">
+                                <td class="p-2 md:p-3 border-r border-white/5 font-medium text-gray-300">Harga</td>
+                                <td class="p-2 md:p-3 border-r border-white/5 text-center text-white font-semibold" id="col1Harga">-</td>
+                                <td class="p-2 md:p-3 text-center text-white font-semibold" id="col2Harga">-</td>
+                            </tr>
+                            <tr class="hover:bg-white/5">
+                                <td class="p-2 md:p-3 border-r border-white/5 font-medium text-gray-300">DP 20% (dibayar di awal)</td>
+                                <td class="p-2 md:p-3 border-r border-white/5 text-center text-white" id="col1DP">-</td>
+                                <td class="p-2 md:p-3 text-center text-white" id="col2DP">-</td>
+                            </tr>
+                            <tr class="hover:bg-white/5">
+                                <td class="p-2 md:p-3 border-r border-white/5 font-medium text-gray-300">Pokok Cicilan</td>
+                                <td class="p-2 md:p-3 border-r border-white/5 text-center text-white" id="col1Pinjaman">-</td>
+                                <td class="p-2 md:p-3 text-center text-white" id="col2Pinjaman">-</td>
+                            </tr>
+                            <tr class="bg-emerald-500/10 font-bold">
+                                <td class="p-2 md:p-3 border-r border-white/5 font-bold text-emerald-400">Cicilan/Bulan</td>
+                                <td class="p-2 md:p-3 border-r border-white/5 text-center text-emerald-400 text-sm md:text-base font-bold" id="col1Cicilan">-</td>
+                                <td class="p-2 md:p-3 text-center text-emerald-400 text-sm md:text-base font-bold" id="col2Cicilan">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-yellow-500/10 border border-yellow-500/20 rounded-lg p-3 text-xs text-yellow-200/80 flex items-start gap-2 mt-4">
+                    <i data-lucide="info" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                    <div class="space-y-1">
+                        <p>Disarankan pengambilan jangka waktu Cicilan 3 tahun agar cicilan bulanan lebih ringan.</p>
+                        <p class="text-yellow-400/60 text-[10px] md:text-xs">*Administrasi, DP dan Cicilan pertama dibayar sekali diawal sebagai tanda jadi pemesanan</p>
+                    </div>
                 </div>
             </div>
+
+            <!-- ===== SKEMA 2: INVESTASI CICILAN ===== -->
+            <div id="scheme-investasi" class="hidden">
+                <div class="bg-emerald-500/10 border border-emerald-500/20 rounded-lg p-3 flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-2">
+                        <i data-lucide="ticket" class="w-4 h-4 text-emerald-400"></i>
+                        <span class="text-xs md:text-sm text-gray-300">Booking Fee (<span id="invFeePercent">3</span>%)</span>
+                    </div>
+                    <span class="text-sm md:text-base font-bold text-emerald-400" id="invBookingFee">Rp -</span>
+                </div>
+
+                <div class="overflow-hidden rounded-xl border border-white/10">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-emerald-600/20 text-emerald-400 text-xs md:text-sm font-bold">
+                                <th class="p-2 md:p-3 border-b border-white/10 border-r w-[55%]">Komponen</th>
+                                <th class="p-2 md:p-3 border-b border-white/10 text-center w-[45%]">Investasi Cicilan</th>
+                            </tr>
+                        </thead>
+                        <tbody class="text-[11px] md:text-sm divide-y divide-white/5">
+                            <tr class="hover:bg-white/5">
+                                <td class="p-2 md:p-3 border-r border-white/5 text-gray-300">Harga Kavling</td>
+                                <td class="p-2 md:p-3 text-center text-white font-semibold" id="invHarga">-</td>
+                            </tr>
+                            <tr class="hover:bg-white/5">
+                                <td class="p-2 md:p-3 border-r border-white/5 text-gray-300">Booking Fee (3%)</td>
+                                <td class="p-2 md:p-3 text-center text-white" id="invBookingFeeRow">-</td>
+                            </tr>
+                            <tr class="hover:bg-white/5">
+                                <td class="p-2 md:p-3 border-r border-white/5 text-gray-300">Modal Dicicil (70%)</td>
+                                <td class="p-2 md:p-3 text-center text-white" id="invModal">-</td>
+                            </tr>
+                            <tr class="bg-emerald-500/10 font-bold">
+                                <td class="p-2 md:p-3 border-r border-white/5 text-emerald-400">Cicilan Modal / Bulan</td>
+                                <td class="p-2 md:p-3 text-center text-emerald-400 text-sm md:text-base font-bold" id="invCicilan">-</td>
+                            </tr>
+                            <tr class="hover:bg-white/5">
+                                <td class="p-2 md:p-3 border-r border-white/5 text-gray-300">Tenor</td>
+                                <td class="p-2 md:p-3 text-center text-white" id="invTenor">24 bulan</td>
+                            </tr>
+                            <tr class="hover:bg-white/5">
+                                <td class="p-2 md:p-3 border-r border-white/5 text-gray-300">Profit (30%) saat terjual</td>
+                                <td class="p-2 md:p-3 text-center text-emerald-400 font-bold" id="invProfit">-</td>
+                            </tr>
+                            <tr class="bg-indigo-500/10">
+                                <td class="p-2 md:p-3 border-r border-white/5 text-indigo-400 font-bold">Total Kembali</td>
+                                <td class="p-2 md:p-3 text-center text-indigo-400 font-bold text-sm md:text-base" id="invTotalReturn">-</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg p-3 mt-4 text-xs text-emerald-200/90 flex items-start gap-2">
+                    <i data-lucide="shield-check" class="w-4 h-4 mt-0.5 flex-shrink-0"></i>
+                    <div class="space-y-1">
+                        <p><strong>🔒 Jaminan:</strong> HAK MILIK PENUH 100% jika unit belum terjual dalam 24 bulan.</p>
+                        <p class="text-emerald-400/70 text-[10px] md:text-xs">*Jika unit terjual sebelum 24 bulan, profit dihitung proporsional sesuai bulan berjalan.</p>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <div class="sticky bottom-0 bg-[#0a0a0a] border-t border-white/10 p-4 md:p-6 grid grid-cols-3 gap-2 md:gap-3">
@@ -1443,6 +1520,15 @@
 
             <details class="glass rounded-xl border border-white/10 overflow-hidden" data-aos="fade-up">
                 <summary class="p-4 md:p-6 font-bold text-white hover:bg-white/5 transition cursor-pointer flex justify-between items-center">
+                    Apa itu skema Investasi Cicilan?
+                </summary>
+                <div class="p-4 md:p-6 text-gray-400 border-t border-white/5 bg-white/5">
+                    Skema Investasi Cicilan adalah sistem di mana Anda cukup membayar booking fee 3% di awal, lalu mencicil modal sebesar 70% dari harga kavling selama 24 bulan. Saat unit terjual, Anda mendapatkan profit 30% dari harga kavling. Jika unit belum terjual dalam 24 bulan, Anda mendapatkan HAK MILIK PENUH atas kavling tersebut.
+                </div>
+            </details>
+
+            <details class="glass rounded-xl border border-white/10 overflow-hidden" data-aos="fade-up">
+                <summary class="p-4 md:p-6 font-bold text-white hover:bg-white/5 transition cursor-pointer flex justify-between items-center">
                     Kapan jadwal pembayaran cicilan setiap bulannya?
                 </summary>
                 <div class="p-4 md:p-6 text-gray-400 border-t border-white/5 bg-white/5">
@@ -1571,9 +1657,10 @@
                     1️⃣ 📋 Lihat Unit Tersedia<br />
                     2️⃣ 🔍 Cari Unit (contoh: G1, K1, A1)<br />
                     3️⃣ 💰 Simulasi Cicilan<br />
-                    4️⃣ 📍 Lokasi & Akses<br />
-                    5️⃣ 📞 Hubungi Marketing<br />
-                    6️⃣ ❓ Bantuan / FAQ<br /><br />
+                    4️⃣ 📊 Investasi Cicilan<br />
+                    5️⃣ 📍 Lokasi & Akses<br />
+                    6️⃣ 📞 Hubungi Marketing<br />
+                    7️⃣ ❓ Bantuan / FAQ<br /><br />
                     <em>Ketik nomor atau kata kunci, atau klik tombol cepat di bawah ini.</em>
                 </div>
                 <div class="message-time" id="welcomeTime2"></div>
@@ -1589,10 +1676,11 @@
         <div class="quick-reply-container" id="quickReplyContainer">
             <span class="quick-reply-btn" onclick="quickAsk('1')">📋 Unit Tersedia</span>
             <span class="quick-reply-btn" onclick="quickAsk('2')">🔍 Cari Unit</span>
-            <span class="quick-reply-btn" onclick="quickAsk('3')">💰 Simulasi</span>
-            <span class="quick-reply-btn" onclick="quickAsk('4')">📍 Lokasi</span>
-            <span class="quick-reply-btn" onclick="quickAsk('5')">📞 Kontak</span>
-            <span class="quick-reply-btn" onclick="quickAsk('6')">❓ Bantuan</span>
+            <span class="quick-reply-btn" onclick="quickAsk('3')">💰 Cicilan</span>
+            <span class="quick-reply-btn" onclick="quickAsk('4')">📊 Investasi</span>
+            <span class="quick-reply-btn" onclick="quickAsk('5')">📍 Lokasi</span>
+            <span class="quick-reply-btn" onclick="quickAsk('6')">📞 Kontak</span>
+            <span class="quick-reply-btn" onclick="quickAsk('7')">❓ Bantuan</span>
         </div>
 
         <div class="chatbot-input-area">
@@ -1913,6 +2001,13 @@
     const SIMULATION_CONFIG = {
         dpPercent: 20,
         interestRate: 12,
+        // ===== SISTEM INVESTASI CICILAN (BARU) =====
+        investasi: {
+            bookingFeePercent: 3,      // 3% dari harga
+            modalPercent: 70,          // Cicil 70% dari harga
+            profitPercent: 30,         // Profit 30% dibagi saat terjual
+            durationMonths: 24         // Periode 24 bulan
+        }
     };
 
     const dataTanahTable = [
@@ -1956,6 +2051,7 @@
     ];
 
     let currentSimulationData = null;
+    let currentInvestmentData = null;
     let currentUnitData = null;
     let currentWaitingUnitData = null;
 
@@ -1991,13 +2087,41 @@
         return { price, bookingFee, dp, principal, year2: { cicilan: cicilan2tahun }, year3: { cicilan: cicilan3tahun } };
     }
 
+    // ===== HITUNG INVESTASI CICILAN (BARU) =====
+    function calculateInvestmentScheme(unitPrice) {
+        const price = parsePrice(unitPrice);
+        const cfg = SIMULATION_CONFIG.investasi;
+        const bookingFee = Math.round(price * (cfg.bookingFeePercent / 100));
+        const modalTotal = Math.round(price * (cfg.modalPercent / 100));
+        const cicilanPerBulan = Math.ceil(modalTotal / cfg.durationMonths);
+        const profit = Math.round(price * (cfg.profitPercent / 100));
+        const totalReturn = modalTotal + profit;
+
+        return {
+            price,
+            bookingFee,
+            bookingFeePct: cfg.bookingFeePercent,
+            modalTotal,
+            modalPct: cfg.modalPercent,
+            cicilanPerBulan,
+            tenor: cfg.durationMonths,
+            profit,
+            profitPct: cfg.profitPercent,
+            totalReturn,
+            jaminan: 'HAK MILIK PENUH 100% jika belum terjual dalam ' + cfg.durationMonths + ' bulan',
+            note: 'Jika unit terjual sebelum ' + cfg.durationMonths + ' bulan, profit dihitung proporsional sesuai bulan berjalan.'
+        };
+    }
+
     // ============================================================
     //  MODAL CONTROLS
     // ============================================================
-    window.openSimulationModal = function(unitId, unitPrice) {
+    window.openSimulationModal = function(unitId, unitPrice, defaultScheme) {
         const unit = dataTanahTable.find(u => u.id === unitId);
         if (!unit) return;
         currentUnitData = unit;
+
+        // ---- Skema Cicilan Reguler ----
         const calc = calculateBothSimulations(unit.harga);
         currentSimulationData = calc;
         document.getElementById('modalUnitInfo').textContent = `Unit ${unit.id} | Luas ${unit.luas}m² | Status ${unit.status}`;
@@ -2010,8 +2134,48 @@
         document.getElementById('col2DP').textContent = formatCurrency(calc.dp);
         document.getElementById('col2Pinjaman').textContent = formatCurrency(calc.principal);
         document.getElementById('col2Cicilan').textContent = formatCurrency(calc.year3.cicilan);
+
+        // ---- Skema Investasi Cicilan (BARU) ----
+        const inv = calculateInvestmentScheme(unit.harga);
+        currentInvestmentData = inv;
+        document.getElementById('invHarga').textContent = formatCurrency(inv.price);
+        document.getElementById('invBookingFee').textContent = formatCurrency(inv.bookingFee);
+        document.getElementById('invBookingFeeRow').textContent = formatCurrency(inv.bookingFee);
+        document.getElementById('invModal').textContent = formatCurrency(inv.modalTotal);
+        document.getElementById('invCicilan').textContent = formatCurrency(inv.cicilanPerBulan);
+        document.getElementById('invTenor').textContent = inv.tenor + ' bulan';
+        document.getElementById('invProfit').textContent = formatCurrency(inv.profit);
+        document.getElementById('invTotalReturn').textContent = formatCurrency(inv.totalReturn);
+
         document.getElementById('simulationModal').classList.add('active');
         document.body.style.overflow = 'hidden';
+
+        // Pilih skema default (kalau dipanggil dengan parameter)
+        switchScheme(defaultScheme || 'cicilan');
+
+        lucide.createIcons();
+    };
+
+    // ===== SWITCH TAB SKEMA =====
+    window.switchScheme = function(scheme) {
+        const tabCicilan = document.getElementById('tab-cicilan');
+        const tabInvestasi = document.getElementById('tab-investasi');
+        const schemeCicilan = document.getElementById('scheme-cicilan');
+        const schemeInvestasi = document.getElementById('scheme-investasi');
+
+        if (scheme === 'investasi') {
+            tabInvestasi.className = 'flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition text-white bg-emerald-600';
+            tabCicilan.className = 'flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition text-gray-400 hover:text-white';
+            schemeInvestasi.classList.remove('hidden');
+            schemeCicilan.classList.add('hidden');
+            window._activeScheme = 'investasi';
+        } else {
+            tabCicilan.className = 'flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition text-white bg-indigo-600';
+            tabInvestasi.className = 'flex-1 py-2 px-3 rounded-lg text-xs md:text-sm font-bold transition text-gray-400 hover:text-white';
+            schemeCicilan.classList.remove('hidden');
+            schemeInvestasi.classList.add('hidden');
+            window._activeScheme = 'cicilan';
+        }
         lucide.createIcons();
     };
 
@@ -2049,7 +2213,7 @@
     }
 
     function downloadSimulationPDF() {
-        if (!currentSimulationData || !currentUnitData) return;
+        if (!currentUnitData) return;
         const { jsPDF } = window.jspdf;
         const doc = new jsPDF();
         const now = new Date();
@@ -2059,44 +2223,64 @@
         doc.setFontSize(16);
         doc.text("Simulasi Pembayaran Kavling Kebun Maoslor", 14, 20);
         doc.setFontSize(10);
-        doc.text(`Unit: ${currentUnitData.id} | Luas: ${currentUnitData.luas}m² | Status: ${currentUnitData.status}`, 14,
-            28);
+        doc.text(`Unit: ${currentUnitData.id} | Luas: ${currentUnitData.luas}m² | Status: ${currentUnitData.status}`, 14, 28);
         doc.text(`Generated: ${dateStr}`, 14, 34);
-        doc.text(`*Administrasi: ${formatCurrency(currentSimulationData.bookingFee)} (dibayar diawal)`, 14, 42);
 
-        const body = [
-            ['Harga', formatCurrency(currentSimulationData.price), formatCurrency(currentSimulationData.price)],
-            ['DP 20% (dibayar di Awal)', formatCurrency(currentSimulationData.dp), formatCurrency(currentSimulationData
-                .dp)],
-            ['Pokok Cicilan', formatCurrency(currentSimulationData.principal), formatCurrency(currentSimulationData
-                .principal)],
-            ['Cicilan/Bulan (cicilan pertama dibayar di Awal)', formatCurrency(currentSimulationData.year2.cicilan),
-                formatCurrency(currentSimulationData.year3.cicilan)
-            ]
-        ];
-        doc.autoTable({
-            startY: 48,
-            head: [
-                ['Komponen', '2 Tahun', '3 Tahun']
-            ],
-            body: body,
-            theme: 'grid',
-            styles: { fontSize: 9, cellPadding: 2 },
-            headStyles: { fillColor: [79, 70, 229] }
-        });
+        let startY = 44;
 
-        const finalY = doc.lastAutoTable.finalY + 8;
-        doc.setFontSize(9);
-        doc.text("Catatan:", 14, finalY);
-        doc.setFontSize(8);
-        doc.text("• Disarankan pengambilan jangka waktu Cicilan 3 tahun agar cicilan bulanan lebih ringan", 14, finalY +
-        6);
-        doc.text("• Administrasi dibayar sekali diawal sebagai tanda jadi", 14, finalY + 12);
-        doc.text("• Angka dapat berubah sesuai ketentuan marketing terbaru", 14, finalY + 18);
+        // ---- SKEMA CICILAN REGULER ----
+        if (currentSimulationData) {
+            doc.setFontSize(12);
+            doc.text("A. Skema Cicilan Reguler", 14, startY);
+            doc.setFontSize(9);
+            doc.text(`*Administrasi: ${formatCurrency(currentSimulationData.bookingFee)} (dibayar diawal)`, 14, startY + 6);
+            const body1 = [
+                ['Harga', formatCurrency(currentSimulationData.price), formatCurrency(currentSimulationData.price)],
+                ['DP 20% (dibayar di Awal)', formatCurrency(currentSimulationData.dp), formatCurrency(currentSimulationData.dp)],
+                ['Pokok Cicilan', formatCurrency(currentSimulationData.principal), formatCurrency(currentSimulationData.principal)],
+                ['Cicilan/Bulan', formatCurrency(currentSimulationData.year2.cicilan), formatCurrency(currentSimulationData.year3.cicilan)]
+            ];
+            doc.autoTable({
+                startY: startY + 10,
+                head: [['Komponen', '2 Tahun', '3 Tahun']],
+                body: body1,
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 2 },
+                headStyles: { fillColor: [79, 70, 229] }
+            });
+            startY = doc.lastAutoTable.finalY + 8;
+        }
 
-        doc.save(
-            `Simulasi_Unit_${currentUnitData.id}_${now.getFullYear()}${now.getMonth()+1}${now.getDate()}_${now.getHours()}${now.getMinutes()}.pdf`
-            );
+        // ---- SKEMA INVESTASI CICILAN ----
+        if (currentInvestmentData) {
+            doc.setFontSize(12);
+            doc.text("B. Skema Investasi Cicilan", 14, startY);
+            doc.setFontSize(9);
+            const inv = currentInvestmentData;
+            const body2 = [
+                ['Harga Kavling', formatCurrency(inv.price)],
+                [`Booking Fee (${inv.bookingFeePct}%)`, formatCurrency(inv.bookingFee)],
+                [`Modal Dicicil (${inv.modalPct}%)`, formatCurrency(inv.modalTotal)],
+                ['Cicilan Modal / Bulan', formatCurrency(inv.cicilanPerBulan)],
+                ['Tenor', inv.tenor + ' bulan'],
+                [`Profit (${inv.profitPct}%) saat terjual`, formatCurrency(inv.profit)],
+                ['Total Kembali', formatCurrency(inv.totalReturn)]
+            ];
+            doc.autoTable({
+                startY: startY + 6,
+                head: [['Komponen', 'Investasi Cicilan']],
+                body: body2,
+                theme: 'grid',
+                styles: { fontSize: 9, cellPadding: 2 },
+                headStyles: { fillColor: [16, 185, 129] }
+            });
+            const lastY = doc.lastAutoTable.finalY + 4;
+            doc.setFontSize(8);
+            doc.text("Jaminan: HAK MILIK PENUH 100% jika belum terjual dalam " + inv.tenor + " bulan", 14, lastY);
+            doc.text("*Jika unit terjual sebelum " + inv.tenor + " bulan, profit dihitung proporsional.", 14, lastY + 5);
+        }
+
+        doc.save(`Simulasi_Unit_${currentUnitData.id}_${now.getFullYear()}${now.getMonth()+1}${now.getDate()}.pdf`);
     }
 
     function contactMarketingSimulation() {
@@ -2205,9 +2389,9 @@
 
     // ---- State ----
     const chatState = {
-        currentMenu: 'main', // 'main' | 'unit_detail' | 'simulation' | 'booking'
+        currentMenu: 'main', // 'main' | 'unit_detail' | 'simulation' | 'investment' | 'booking' | 'waiting' | 'search'
         currentUnitId: null,
-        waitingForUnit: false, // true jika user diminta input kode unit
+        waitingForUnit: false,
         lastQuery: '',
     };
 
@@ -2229,6 +2413,7 @@
         if (unit.status === 'Tersedia') {
             btns +=
                 `<span class="chat-action-btn primary" onclick="quickAsk('simulasi ${unit.id}')">💳 Simulasi Cicilan</span>`;
+            btns += `<span class="chat-action-btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);" onclick="quickAsk('investasi ${unit.id}')">📊 Investasi Cicilan</span>`;
             btns +=
                 `<span class="chat-action-btn" onclick="quickAsk('booking ${unit.id}')">📋 Cara Booking</span>`;
         } else if (unit.status === 'Booking') {
@@ -2262,9 +2447,10 @@
         1️⃣ 📋 <strong>Lihat Unit Tersedia</strong><br/>
         2️⃣ 🔍 <strong>Cari Unit</strong> (contoh: G1, K1, A1)<br/>
         3️⃣ 💰 <strong>Simulasi Cicilan</strong><br/>
-        4️⃣ 📍 <strong>Lokasi & Akses</strong><br/>
-        5️⃣ 📞 <strong>Hubungi Marketing</strong><br/>
-        6️⃣ ❓ <strong>Bantuan / FAQ</strong><br/><br/>
+        4️⃣ 📊 <strong>Investasi Cicilan</strong> <em>(BARU)</em><br/>
+        5️⃣ 📍 <strong>Lokasi & Akses</strong><br/>
+        6️⃣ 📞 <strong>Hubungi Marketing</strong><br/>
+        7️⃣ ❓ <strong>Bantuan / FAQ</strong><br/><br/>
         <em>Ketik nomor atau kata kunci, atau klik tombol cepat di bawah.</em>
         `;
     }
@@ -2278,6 +2464,41 @@
             `• <strong>${u.id}</strong> — ${u.harga} (${u.luas}m²) ${statusBadge(u.status)}`
         ).join('<br/>');
         msg += `<br/><br/>💡 <em>Ketik kode unit (contoh: G1) untuk detail lengkap.</em>`;
+        return msg;
+    }
+
+    // ---- Render Investasi Cicilan (BARU) ----
+    function renderInvestment(unitId) {
+        const unit = findUnit(unitId);
+        if (!unit) return `❌ Unit ${unitId} tidak ditemukan. Coba cek daftar unit tersedia.`;
+        if (unit.status !== 'Tersedia') {
+            return `❌ Unit ${unitId} saat ini berstatus <strong>${unit.status}</strong>, tidak bisa disimulasikan.`;
+        }
+        const inv = calculateInvestmentScheme(unit.harga);
+        const msg = `
+        <strong>📊 Investasi Cicilan — Unit ${unit.id}</strong><br/><br/>
+        💰 Harga: ${unit.harga}<br/>
+        📏 Luas: ${unit.luas}m²<br/>
+        📌 Status: ${statusBadge(unit.status)}<br/><br/>
+        <strong>📋 Skema Investasi Cicilan:</strong><br/>
+        • Booking Fee (3%): ${formatCurrency(inv.bookingFee)}<br/>
+        • Modal Dicicil (70%): ${formatCurrency(inv.modalTotal)}<br/>
+        • <strong>Cicilan Modal: ${formatCurrency(inv.cicilanPerBulan)}/bulan</strong><br/>
+        • Tenor: ${inv.tenor} bulan<br/>
+        • Profit (30%) saat terjual: ${formatCurrency(inv.profit)}<br/>
+        • <strong>Total Kembali: ${formatCurrency(inv.totalReturn)}</strong><br/><br/>
+        <strong>🔒 Jaminan:</strong> HAK MILIK PENUH 100% jika belum terjual dalam ${inv.tenor} bulan.<br/><br/>
+        <div class="chat-actions">
+            <span class="chat-action-btn primary" onclick="quickAsk('booking ${unit.id}')">📋 Cara Booking</span>
+            <span class="chat-action-btn" onclick="quickAsk('simulasi ${unit.id}')">💳 Cicilan Reguler</span>
+            <span class="back-btn" onclick="quickAsk('menu')">🔙 Kembali</span>
+        </div>
+        `;
+        setTimeout(() => {
+            if (typeof window.openSimulationModal === 'function') {
+                window.openSimulationModal(unit.id, unit.harga, 'investasi');
+            }
+        }, 400);
         return msg;
     }
 
@@ -2303,6 +2524,7 @@
         💡 <em>Disarankan tenor 3 tahun agar cicilan lebih ringan.</em><br/><br/>
         <div class="chat-actions">
             <span class="chat-action-btn primary" onclick="quickAsk('booking ${unit.id}')">📋 Cara Booking</span>
+            <span class="chat-action-btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);" onclick="quickAsk('investasi ${unit.id}')">📊 Investasi</span>
             <span class="chat-action-btn" onclick="quickAsk('denah ${unit.id}')">🗺️ Lihat Denah</span>
             <span class="back-btn" onclick="quickAsk('menu')">🔙 Kembali</span>
         </div>
@@ -2339,14 +2561,20 @@
         return `
         <strong>📋 Cara Booking — Unit ${unit.id}</strong><br/><br/>
         ✅ Unit ini <strong>TERSEDIA</strong>!<br/><br/>
-        <strong>Langkah Booking:</strong><br/>
-        1️⃣ Hubungi marketing kami via WhatsApp.<br/>
-        2️⃣ Sampaikan kode unit: <strong>${unit.id}</strong><br/>
-        3️⃣ Lakukan pembayaran DP 20% + administrasi.<br/>
-        4️⃣ Tanda jadi dan cicilan pertama dibayar di awal.<br/><br/>
+        <strong>Pilihan Skema Pembelian:</strong><br/><br/>
+        <strong>💳 Cicilan Reguler:</strong><br/>
+        • Administrasi (dibayar awal)<br/>
+        • DP 20% (dibayar awal)<br/>
+        • Cicilan bunga 12%/thn flat, tenor 1-3 tahun<br/><br/>
+        <strong>📊 Investasi Cicilan:</strong><br/>
+        • Booking fee 3% dari harga<br/>
+        • Cicil modal 70% selama 24 bulan<br/>
+        • Profit 30% saat unit terjual<br/>
+        • Jaminan hak milik jika belum terjual<br/><br/>
         📞 <strong>Kontak:</strong> 0877-8852-6410 (Ribut Nurdiansyah)<br/><br/>
         <div class="chat-actions">
-            <span class="chat-action-btn primary" onclick="quickAsk('simulasi ${unit.id}')">💳 Simulasi</span>
+            <span class="chat-action-btn primary" onclick="quickAsk('simulasi ${unit.id}')">💳 Simulasi Cicilan</span>
+            <span class="chat-action-btn" style="background:rgba(16,185,129,0.15);border-color:rgba(16,185,129,0.3);" onclick="quickAsk('investasi ${unit.id}')">📊 Investasi</span>
             <span class="chat-action-btn" onclick="quickAsk('kontak')">📞 Hubungi Marketing</span>
             <span class="back-btn" onclick="quickAsk('menu')">🔙 Kembali</span>
         </div>
@@ -2393,7 +2621,7 @@
         • 15 menit ke pusat kota Cilacap<br/>
         • Udara sejuk, cocok untuk hidroponik<br/><br/>
         <div class="chat-actions">
-            <span class="chat-action-btn" onclick="quickAsk('menu')">🔙 Kembali</span>
+            <span class="back-btn" onclick="quickAsk('menu')">🔙 Kembali</span>
         </div>
         `;
     }
@@ -2419,12 +2647,14 @@
         <strong>❓ Bantuan & FAQ</strong><br/><br/>
         <strong>Pertanyaan umum:</strong><br/>
         • <strong>Cicilan:</strong> DP 20%, tenor 1-3 tahun, bunga 12%/thn flat.<br/>
-        • <strong>Booking:</strong> Hubungi marketing, bayar DP + administrasi.<br/>
+        • <strong>Investasi Cicilan:</strong> Booking fee 3%, cicil 70% modal selama 24 bulan, profit 30% saat terjual.<br/>
+        • <strong>Booking:</strong> Hubungi marketing, bayar booking fee/DP + administrasi.<br/>
         • <strong>Dokumen:</strong> Diberikan setelah lunas.<br/>
         • <strong>Survey:</strong> Gratis, hubungi marketing.<br/><br/>
         <strong>📋 Perintah cepat:</strong><br/>
         • <strong>unit G1</strong> — detail unit G1<br/>
         • <strong>simulasi G1</strong> — simulasi cicilan<br/>
+        • <strong>investasi G1</strong> — simulasi investasi<br/>
         • <strong>booking G1</strong> — cara booking<br/>
         • <strong>waiting G1</strong> — daftar tunggu<br/>
         • <strong>denah G1</strong> — lihat denah<br/><br/>
@@ -2505,9 +2735,10 @@
         const isSearch = /^(2|cari unit|cari|search)$/.test(lower);
         const isSimulasiCmd = /^(3|simulasi|simulasi cicilan|cicilan)$/.test(lower) ||
             lower.startsWith('simulasi ');
-        const isLocation = /^(4|lokasi|akses|alamat|dimana|letak|peta)$/.test(lower);
-        const isContact = /^(5|kontak|marketing|hubungi|wa|whatsapp|telepon|phone)$/.test(lower);
-        const isHelp = /^(6|bantuan|faq|help|tolong|bantu)$/.test(lower);
+        const isInvestasiCmd = /^(4|investasi|investasi cicilan|invest)$/.test(lower) || lower.startsWith('investasi ');
+        const isLocation = /^(5|lokasi|akses|alamat|dimana|letak|peta)$/.test(lower);
+        const isContact = /^(6|kontak|marketing|hubungi|wa|whatsapp|telepon|phone)$/.test(lower);
+        const isHelp = /^(7|bantuan|faq|help|tolong|bantu)$/.test(lower);
         const isBookingCmd = lower.startsWith('booking ') || lower === 'booking';
         const isWaitingCmd = lower.startsWith('waiting ') || lower === 'waiting';
         const isDenahCmd = lower.startsWith('denah ') || lower === 'denah';
@@ -2566,7 +2797,6 @@
 
         // ---- 5. SIMULASI (3) ----
         if (isSimulasiCmd) {
-            // Jika ada kode unit setelah "simulasi"
             if (detectedUnitId) {
                 chatState.currentMenu = 'simulation';
                 chatState.currentUnitId = detectedUnitId;
@@ -2576,7 +2806,6 @@
                 }, 400);
                 return;
             }
-            // Jika tidak ada kode, minta input
             chatState.waitingForUnit = true;
             chatState.currentMenu = 'simulation';
             setTimeout(() => {
@@ -2588,19 +2817,40 @@
             return;
         }
 
-        // ---- 6. LOKASI (4) ----
+        // ---- 5b. INVESTASI CICILAN (4) - BARU ----
+        if (isInvestasiCmd) {
+            if (detectedUnitId) {
+                chatState.currentMenu = 'investment';
+                chatState.currentUnitId = detectedUnitId;
+                setTimeout(() => {
+                    removeTypingIndicator();
+                    addChatMessage(renderInvestment(detectedUnitId), 'bot');
+                }, 400);
+                return;
+            }
+            chatState.waitingForUnit = true;
+            chatState.currentMenu = 'investment';
+            setTimeout(() => {
+                removeTypingIndicator();
+                addChatMessage(
+                    '📊 <strong>Investasi Cicilan</strong><br/><br/>Silakan ketik kode unit yang ingin disimulasikan.<br/>Contoh: <strong>G1</strong>, <strong>K1</strong>, <strong>A1</strong>',
+                    'bot');
+            }, 400);
+            return;
+        }
+
+        // ---- 6. LOKASI (5) ----
         if (isLocation) {
             chatState.currentMenu = 'main';
             setTimeout(() => {
                 removeTypingIndicator();
                 addChatMessage(renderLocation(), 'bot');
-                // scroll ke video (ada peta)
                 highlightSection('video');
             }, 400);
             return;
         }
 
-        // ---- 7. KONTAK (5) ----
+        // ---- 7. KONTAK (6) ----
         if (isContact) {
             chatState.currentMenu = 'main';
             setTimeout(() => {
@@ -2611,7 +2861,7 @@
             return;
         }
 
-        // ---- 8. BANTUAN (6) ----
+        // ---- 8. BANTUAN (7) ----
         if (isHelp) {
             chatState.currentMenu = 'main';
             setTimeout(() => {
@@ -2625,7 +2875,6 @@
         if (isBookingCmd) {
             let unitId = detectedUnitId;
             if (!unitId) {
-                // Ambil dari state jika sedang di unit_detail
                 if (chatState.currentUnitId && chatState.currentMenu === 'unit_detail') {
                     unitId = chatState.currentUnitId;
                 } else {
@@ -2687,7 +2936,6 @@
                 if (chatState.currentUnitId && chatState.currentMenu === 'unit_detail') {
                     unitId = chatState.currentUnitId;
                 } else {
-                    // Tanpa unit: scroll ke denah saja
                     setTimeout(() => {
                         removeTypingIndicator();
                         addChatMessage('🗺️ Saya arahkan ke Denah 3D interaktif.', 'bot');
@@ -2716,7 +2964,6 @@
                 setTimeout(() => {
                     removeTypingIndicator();
                     addChatMessage(renderUnitDetail(unit), 'bot');
-                    // scroll ke denah dan highlight
                     navigateToDenah(unit.id);
                 }, 400);
                 return;
@@ -2725,7 +2972,6 @@
 
         // ---- 13. FALLBACK: jika sedang menunggu input unit ----
         if (chatState.waitingForUnit) {
-            // Coba parse input sebagai kode unit
             const possibleUnit = findUnit(query);
             if (possibleUnit) {
                 chatState.waitingForUnit = false;
@@ -2736,6 +2982,14 @@
                     setTimeout(() => {
                         removeTypingIndicator();
                         addChatMessage(renderSimulation(possibleUnit.id), 'bot');
+                    }, 400);
+                    return;
+                } else if (prevMenu === 'investment') {
+                    chatState.currentMenu = 'investment';
+                    chatState.currentUnitId = possibleUnit.id;
+                    setTimeout(() => {
+                        removeTypingIndicator();
+                        addChatMessage(renderInvestment(possibleUnit.id), 'bot');
                     }, 400);
                     return;
                 } else if (prevMenu === 'booking') {
@@ -2755,7 +3009,6 @@
                     }, 400);
                     return;
                 } else {
-                    // default: tampilkan detail unit
                     chatState.currentMenu = 'unit_detail';
                     chatState.currentUnitId = possibleUnit.id;
                     chatState.waitingForUnit = false;
@@ -2767,7 +3020,6 @@
                     return;
                 }
             } else {
-                // Bukan unit yang valid
                 chatState.waitingForUnit = false;
                 setTimeout(() => {
                     removeTypingIndicator();
@@ -2788,6 +3040,7 @@
                 `• <strong>menu</strong> — lihat menu utama<br/>` +
                 `• <strong>unit G1</strong> — detail unit G1<br/>` +
                 `• <strong>simulasi G1</strong> — simulasi cicilan<br/>` +
+                `• <strong>investasi G1</strong> — simulasi investasi<br/>` +
                 `• <strong>booking G1</strong> — cara booking<br/>` +
                 `• <strong>waiting G1</strong> — daftar tunggu<br/>` +
                 `• <strong>denah G1</strong> — lihat denah<br/>` +
@@ -2816,7 +3069,6 @@
         if (panel.classList.contains('active')) {
             btn.innerHTML = '<i data-lucide="x" style="width: 32px; height: 32px; color: white;"></i>';
             setWelcomeTime();
-            // Reset state ke main menu jika baru buka
             if (chatState.currentMenu !== 'main') {
                 chatState.currentMenu = 'main';
                 chatState.currentUnitId = null;
@@ -2833,7 +3085,6 @@
         const time = new Date().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
         const messageDiv = document.createElement('div');
         messageDiv.className = `message ${sender}`;
-        // Gunakan innerHTML agar HTML dari render fungsi bisa tampil
         messageDiv.innerHTML = `<div class="message-bubble">${text}</div><div class="message-time">${time}</div>`;
         messagesDiv.appendChild(messageDiv);
         messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -2842,7 +3093,6 @@
 
     function showTypingIndicator() {
         const messagesDiv = document.getElementById('chatbotMessages');
-        // Hapus indicator lama jika ada
         const old = document.getElementById('chatTypingIndicator');
         if (old) old.remove();
         const indicator = document.createElement('div');
@@ -2887,10 +3137,8 @@
     window.openSimulationModal = openSimulationModal;
     window.openWaitingListModal = openWaitingListModal;
 
-    // Inisialisasi waktu selamat datang
     document.addEventListener('DOMContentLoaded', () => {
         setWelcomeTime();
-        // Reset state
         chatState.currentMenu = 'main';
         chatState.currentUnitId = null;
         chatState.waitingForUnit = false;
