@@ -112,6 +112,68 @@ section { padding: 60px 20px; }
 .sari-widget.minimized .sari-mini-toggle::after { content: '▲'; font-size: 11px; color: white; font-weight: 900; }
 @keyframes sari-mini-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-6px); } }
 .sari-widget.minimized .sari-chat-panel { position: fixed; bottom: 100px; right: 24px; left: auto; top: auto; width: 320px; height: 400px; max-height: 60vh; }
+/* ============ MUSIC WIDGET ============ */
+#musicWidget{
+  position: fixed;
+  left: 20px;
+  bottom: 20px;
+  z-index: 90;          /* SAMA dengan sari-widget, tapi beda posisi jadi aman */
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+#musicToggle{
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: linear-gradient(135deg,#8b5cf6,#6d28d9);
+  color: #fff;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 6px 20px rgba(139,92,246,.5);
+  transition: transform .2s;
+}
+#musicToggle:hover{ transform: scale(1.08); }
+
+#musicPanel{
+  display: none;
+  position: absolute;
+  left: 0; bottom: 64px;
+  width: 260px;
+  background: #0a0a0a;
+  border: 1px solid rgba(139,92,246,.4);
+  border-radius: 16px;
+  padding: 12px;
+  box-shadow: 0 15px 40px rgba(0,0,0,.7);
+  color: #fff;
+}
+#musicPanel.open{ display: block; }
+.mw-head{
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 8px;
+  font-size: 13px;
+  color: #c4b5fd;
+}
+.mw-head button{ background: none; border: none; color: #c4b5fd; cursor: pointer; font-size: 16px; }
+#musicList{
+  list-style: none; padding: 0; margin: 0 0 10px;
+  max-height: 160px; overflow-y: auto;
+}
+#musicList li{
+  padding: 8px 10px; border-radius: 8px; cursor: pointer;
+  font-size: 13px; color: #d1d5db;
+  transition: background .15s;
+}
+#musicList li:hover{ background: rgba(139,92,246,.15); }
+#musicList li.active{ background: #8b5cf6; color: #fff; font-weight: 700; }
+.mw-controls{ display: flex; justify-content: center; gap: 10px; margin-bottom: 8px; }
+.mw-controls button{
+  border: none; background: rgba(255,255,255,.08); color: #fff;
+  border-radius: 50%; width: 36px; height: 36px;
+  cursor: pointer; font-size: 15px;
+}
+.mw-controls button:hover{ background: rgba(139,92,246,.4); }
+.mw-vol{ display: flex; align-items: center; gap: 6px; font-size: 11px; color: #9ca3af; }
+.mw-vol input{ flex: 1; accent-color: #8b5cf6; }
+
 </style>
 </head>
 <body>
@@ -184,6 +246,38 @@ section { padding: 60px 20px; }
       <button onclick="sariSendText()">➤</button>
     </div>
   </div>
+</div>
+
+<!-- ====== MUSIC WIDGET (kiri bawah) ====== -->
+<div id="musicWidget">
+  <button id="musicToggle" aria-label="Putar musik">🎵</button>
+
+  <div id="musicPanel">
+    <div class="mw-head">
+      <strong>🎶 Musik Latar</strong>
+      <button id="musicClose" aria-label="Tutup">✕</button>
+    </div>
+
+    <ul id="musicList">
+      <li data-src="lagu1.mp3">Lagu Santai 1</li>
+      <li data-src="lagu2.mp3">Lagu Santai 2</li>
+      <li data-src="lagu3.mp3">Lagu Santai 3</li>
+    </ul>
+
+    <div class="mw-controls">
+      <button id="musicPrev">⏮</button>
+      <button id="musicPlay">▶</button>
+      <button id="musicNext">⏭</button>
+    </div>
+
+    <label class="mw-vol">
+      🔉
+      <input type="range" id="musicVol" min="0" max="100" value="35">
+      <span id="musicVolVal">35%</span>
+    </label>
+  </div>
+
+  <audio id="bgm" loop preload="none"></audio>
 </div>
 
 <!-- HALAMAN UTAMA -->
@@ -1425,6 +1519,60 @@ function init(){
 if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
 else setTimeout(init, 100);
 
+})();
+</script>
+
+<!-- ====== MUSIC WIDGET LOGIC ====== -->
+<script>
+(function(){
+  const audio = document.getElementById('bgm');
+  const list  = [...document.querySelectorAll('#musicList li')];
+  const panel = document.getElementById('musicPanel');
+  const btnT  = document.getElementById('musicToggle');
+  const btnC  = document.getElementById('musicClose');
+  const btnP  = document.getElementById('musicPlay');
+  const btnN  = document.getElementById('musicNext');
+  const btnB  = document.getElementById('musicPrev');
+  const vol   = document.getElementById('musicVol');
+  const volV  = document.getElementById('musicVolVal');
+
+  let index = 0;
+  let loaded = false;
+  audio.volume = 0.35;      // ← 35% dari volume full
+
+  function highlight(){
+    list.forEach((li,i)=>li.classList.toggle('active', i===index));
+  }
+
+  function loadTrack(i, autoplay=true){
+    index = i;
+    audio.src = list[i].dataset.src;
+    highlight();
+    loaded = true;
+    if (autoplay) audio.play().catch(()=>{});
+  }
+
+  btnT.addEventListener('click', ()=> panel.classList.toggle('open'));
+  btnC.addEventListener('click', ()=> panel.classList.remove('open'));
+
+  list.forEach((li,i)=>{
+    li.addEventListener('click', ()=> loadTrack(i, true));
+  });
+
+  btnP.addEventListener('click', ()=>{
+    if (!loaded) { loadTrack(0, true); return; }
+    audio.paused ? audio.play().catch(()=>{}) : audio.pause();
+  });
+  audio.addEventListener('play',  ()=> btnP.textContent='⏸');
+  audio.addEventListener('pause', ()=> btnP.textContent='▶');
+
+  btnN.addEventListener('click', ()=> loadTrack((index+1)%list.length));
+  btnB.addEventListener('click', ()=> loadTrack((index-1+list.length)%list.length));
+
+  vol.addEventListener('input', ()=>{
+    audio.volume = vol.value/100;
+    volV.textContent = vol.value + '%';
+  });
 })();
 </script>
 
